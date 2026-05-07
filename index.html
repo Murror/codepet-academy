@@ -1,0 +1,1486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codepet Academy — Ship a real product. Taught by an AI pet.</title>
+<meta name="description" content="A 12-week founder-led cohort for ages 12 to 30. Build, launch, and operate an AI-agent product real customers will pay for.">
+<style>
+  /* Local Codepet brand fonts */
+  @font-face {
+    font-family: 'Upheaval TT';
+    src: url('fonts/upheavtt.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Open Sans';
+    src: url('fonts/OpenSans-Variable.ttf') format('truetype-variations');
+    font-weight: 300 800;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root{
+    /* Official Codepet brand palette */
+    --red:#E24B4A;
+    --green:#029902;
+    --yellow:#FCBE1D;
+    --blue:#1C40CF;
+    --purple:#9538CF;
+    --orange:#F58345;
+    --pink:#FF8CC9;
+
+    /* Surface colors — page is now light by default */
+    --bg:#FFFFFF;
+    --bg-cream:#FCFAED;
+    --ink:#1a1a1a;
+    --ink-dark:#1a1a1a;
+    --muted:#5a5a55;
+    --muted-dark:#5a5a55;
+
+    /* Aliases for legacy class names */
+    --purple-deep:#6e22a3;
+    --border-dim:rgba(0,0,0,0.15);
+    --border-cream:rgba(0,0,0,0.1);
+    --max:1320px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  /* ---------- Type system ---------- */
+  /* Pixel fonts need natural spacing — no negative letter-spacing, no fake bold */
+  .display{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-weight:400;
+    line-height:1.05;
+    letter-spacing:0.02em;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:geometricPrecision;
+  }
+  .display--xxl{font-size:clamp(36px,5.6vw,72px);text-transform:uppercase}
+  .display--xl{font-size:clamp(28px,5vw,56px);text-transform:uppercase}
+  .display--l{font-size:clamp(24px,3.5vw,44px);text-transform:uppercase}
+  .h2{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-weight:400;
+    font-size:clamp(24px,3vw,40px);
+    line-height:1.15;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .h3{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-weight:400;
+    font-size:clamp(18px,1.8vw,22px);
+    line-height:1.25;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:18px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .pill--dark{color:var(--muted-dark)}
+  .pill::before{
+    content:"";
+    width:8px;height:8px;border-radius:999px;
+    background:currentColor;display:inline-block;
+  }
+  .lead{
+    font-size:clamp(16px,1.4vw,20px);
+    color:var(--muted);
+    max-width:62ch;
+  }
+  .lead--dark{color:#444}
+
+  /* ---------- Layout primitives ---------- */
+  .container{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 28px;
+  }
+  .section{
+    padding:120px 0;
+    position:relative;
+  }
+  @media(max-width:760px){
+    .section{padding:72px 0}
+  }
+  .section--cream{ background:var(--bg-cream); color:var(--ink-dark); }
+  .section--blue   { background:var(--blue);   color:#fff; }
+  .section--green  { background:var(--green);  color:#fff; }
+  .section--pink   { background:var(--pink);   color:var(--ink-dark); }
+  .section--orange { background:var(--orange); color:#fff; }
+  .section--purple { background:var(--purple); color:#fff; }
+  .section--red    { background:var(--red);    color:#fff; }
+  .section--yellow { background:var(--yellow); color:var(--ink-dark); }
+  /* When sections are colored, headings stay readable */
+  .section--blue   .h2, .section--green .h2, .section--orange .h2,
+  .section--purple .h2, .section--red .h2 { color:#fff; }
+  .section--pink   .h2, .section--yellow .h2 { color:var(--ink-dark); }
+  /* Lead text on colored sections */
+  .section--blue   .lead, .section--green .lead, .section--orange .lead,
+  .section--purple .lead, .section--red .lead { color:rgba(255,255,255,0.85); }
+  .section--pink   .lead, .section--yellow .lead { color:rgba(0,0,0,0.7); }
+  .row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .grid{display:grid;gap:24px}
+  .grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  @media(max-width:980px){
+    .grid--3,.grid--4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:620px){
+    .grid--2,.grid--3,.grid--4{grid-template-columns:1fr}
+  }
+
+  /* ---------- Buttons (Official Codepet pixel-stamp style) ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:12px;
+    padding:0 28px;
+    height:52px;
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:18px;
+    font-weight:400;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#fff;
+    background:var(--red);
+    border:none;
+    border-radius:0;
+    cursor:pointer;
+    text-decoration:none;
+    white-space:nowrap;
+    transition:filter .2s ease, transform .15s ease;
+    /* Pixel-stepped rounded corners — exact official Codepet polygon */
+    clip-path:polygon(
+      20px 0, calc(100% - 20px) 0,
+      calc(100% - 16px) 0, calc(100% - 16px) 4px,
+      calc(100% - 12px) 4px, calc(100% - 12px) 8px,
+      calc(100% - 8px) 8px, calc(100% - 8px) 12px,
+      calc(100% - 4px) 12px, calc(100% - 4px) 16px,
+      100% 16px, 100% 36px,
+      calc(100% - 4px) 36px, calc(100% - 4px) 40px,
+      calc(100% - 8px) 40px, calc(100% - 8px) 44px,
+      calc(100% - 12px) 44px, calc(100% - 12px) 48px,
+      calc(100% - 16px) 48px, calc(100% - 16px) 52px,
+      calc(100% - 20px) 52px, 20px 52px,
+      16px 52px, 16px 48px,
+      12px 48px, 12px 44px,
+      8px 44px, 8px 40px,
+      4px 40px, 4px 36px,
+      0 36px, 0 16px,
+      4px 16px, 4px 12px,
+      8px 12px, 8px 8px,
+      12px 8px, 12px 4px,
+      16px 4px, 16px 0
+    );
+    /* 3D depth — top highlight + bottom shadow */
+    box-shadow:
+      inset 0 4px 0 0 rgba(255,255,255,0.20),
+      inset 0 -4px 0 0 rgba(0,0,0,0.32);
+  }
+  .btn:hover{filter:brightness(1.08);transform:translateY(-2px)}
+  .btn:active{transform:translateY(0);filter:brightness(0.94)}
+  .btn .arrow{display:inline-block;transition:transform .2s ease}
+  .btn:hover .arrow{transform:translateX(4px)}
+
+  /* Color variants — same shape, different fills */
+  .btn--primary{background:var(--red);color:#fff}
+  .btn--black  {background:#000;color:#fff}
+  .btn--white  {background:#fff;color:var(--red);box-shadow:inset 0 4px 0 0 rgba(255,255,255,0.6),inset 0 -4px 0 0 rgba(0,0,0,0.18)}
+  .btn--purple {background:var(--purple);color:#fff}
+  .btn--yellow {background:var(--yellow);color:#1a1a1a;box-shadow:inset 0 4px 0 0 rgba(255,255,255,0.4),inset 0 -4px 0 0 rgba(0,0,0,0.22)}
+  .btn--ghost  {background:#000;color:#fff} /* alias for legacy ghost usages */
+  .btn--lg     {height:60px;font-size:20px;padding:0 36px;
+    /* Recompute clip-path for 60px tall: corners use top/bottom 20px each, middle 20px */
+    clip-path:polygon(
+      20px 0, calc(100% - 20px) 0,
+      calc(100% - 16px) 0, calc(100% - 16px) 4px,
+      calc(100% - 12px) 4px, calc(100% - 12px) 8px,
+      calc(100% - 8px) 8px, calc(100% - 8px) 12px,
+      calc(100% - 4px) 12px, calc(100% - 4px) 16px,
+      100% 16px, 100% 44px,
+      calc(100% - 4px) 44px, calc(100% - 4px) 48px,
+      calc(100% - 8px) 48px, calc(100% - 8px) 52px,
+      calc(100% - 12px) 52px, calc(100% - 12px) 56px,
+      calc(100% - 16px) 56px, calc(100% - 16px) 60px,
+      calc(100% - 20px) 60px, 20px 60px,
+      16px 60px, 16px 56px,
+      12px 56px, 12px 52px,
+      8px 52px, 8px 48px,
+      4px 48px, 4px 44px,
+      0 44px, 0 16px,
+      4px 16px, 4px 12px,
+      8px 12px, 8px 8px,
+      12px 8px, 12px 4px,
+      16px 4px, 16px 0
+    );
+  }
+
+  /* ---------- Nav (cream pill floats on hero — separated, fixed, hide-on-scroll-down) ---------- */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:transparent;
+    padding:15px 30px;
+    transform:translateY(0);
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+    will-change:transform;
+    pointer-events:none;
+  }
+  .nav.nav--hidden{transform:translateY(-100%)}
+  .nav__inner{max-width:none;margin:0;padding:0}
+  .nav__pill{
+    background:var(--yellow);
+    border-radius:100px;
+    padding:30px 50px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    pointer-events:auto;
+    box-shadow:0 6px 24px rgba(0,0,0,0.10);
+  }
+  .nav__brand{
+    display:inline-flex;align-items:center;gap:10px;
+    line-height:1;
+  }
+  .nav__brand-img{
+    height:44px;width:auto;
+    image-rendering:pixelated;
+    image-rendering:-moz-crisp-edges;
+    image-rendering:crisp-edges;
+  }
+  .nav__brand-academy{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:16px;
+    color:var(--blue);
+    letter-spacing:0.14em;
+    padding-top:6px;
+  }
+  @media (max-width:880px){
+    .nav__brand-img{height:32px}
+    .nav__brand-academy{display:none}
+  }
+  .nav__center{display:flex;gap:40px;align-items:center;flex:1;justify-content:center}
+  .nav__center a{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-weight:400;
+    font-size:16px;
+    color:var(--blue);
+    transition:opacity .2s;
+  }
+  .nav__center a:hover{opacity:0.7}
+  .nav__center .plus{display:inline-block;margin-left:4px;color:var(--blue)}
+  .nav__cta{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-weight:400;
+    font-size:16px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#fff;
+    background:var(--red);
+    padding:0 22px;
+    height:44px;
+    display:inline-flex;align-items:center;gap:10px;
+    text-decoration:none;
+    transition:filter .2s ease, transform .15s ease;
+    /* Pixel-stepped corners — scaled down for navbar (44px tall) */
+    clip-path:polygon(
+      18px 0, calc(100% - 18px) 0,
+      calc(100% - 14px) 0, calc(100% - 14px) 4px,
+      calc(100% - 10px) 4px, calc(100% - 10px) 8px,
+      calc(100% - 6px) 8px, calc(100% - 6px) 12px,
+      calc(100% - 2px) 12px, calc(100% - 2px) 14px,
+      100% 14px, 100% 30px,
+      calc(100% - 2px) 30px, calc(100% - 2px) 32px,
+      calc(100% - 6px) 32px, calc(100% - 6px) 36px,
+      calc(100% - 10px) 36px, calc(100% - 10px) 40px,
+      calc(100% - 14px) 40px, calc(100% - 14px) 44px,
+      calc(100% - 18px) 44px, 18px 44px,
+      14px 44px, 14px 40px,
+      10px 40px, 10px 36px,
+      6px 36px, 6px 32px,
+      2px 32px, 2px 30px,
+      0 30px, 0 14px,
+      2px 14px, 2px 12px,
+      6px 12px, 6px 8px,
+      10px 8px, 10px 4px,
+      14px 4px, 14px 0
+    );
+    box-shadow:
+      inset 0 3px 0 0 rgba(255,255,255,0.22),
+      inset 0 -3px 0 0 rgba(0,0,0,0.32);
+  }
+  .nav__cta:hover{filter:brightness(1.08);transform:translateY(-2px)}
+  .nav__cta:active{transform:translateY(0);filter:brightness(0.94)}
+  .nav__cta .arrow{transition:transform .2s;display:inline-block}
+  .nav__cta:hover .arrow{transform:translateX(4px)}
+
+  /* push page content below the fixed nav */
+  body{padding-top:134px}
+
+  @media(max-width:880px){
+    .nav{padding:12px 16px}
+    .nav__pill{padding:18px 22px}
+    .nav__center{display:none}
+    .nav__brand-img{height:36px}
+    .nav__cta{font-size:16px}
+    body{padding-top:96px}
+  }
+
+  /* ---------- Hero — compact so pets fit in viewport ---------- */
+  .hero{padding:32px 0 96px}
+  .hero__meta{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+  .hero__meta .chip{
+    border:1px solid var(--border-dim);
+    padding:6px 12px;border-radius:999px;
+    font-size:12px;color:var(--muted);
+    font-family:'Upheaval TT','Press Start 2P',monospace;letter-spacing:0.08em;text-transform:uppercase;
+  }
+  .hero__title{margin-bottom:24px}
+  .hero__title .accent{color:var(--purple)}
+  .hero__title .accent-green{color:var(--green)}
+  .hero__sub{max-width:60ch;font-size:clamp(15px,1.3vw,18px);color:var(--muted);margin-bottom:28px}
+  .hero__ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero__ctas .meta{font-size:13px;color:var(--muted);font-family:'Upheaval TT','Press Start 2P',monospace;letter-spacing:0.06em;margin-left:6px;text-transform:uppercase}
+
+  /* === Pixel-pill registration form === */
+  .register-form{
+    display:flex;flex-direction:column;gap:14px;
+    max-width:460px;margin:0 auto;align-items:stretch;
+  }
+  .register-form .row{display:flex;gap:12px}
+  .register-form .row > *{flex:1;min-width:0}
+
+  .register-input,.register-select{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:14px;letter-spacing:0.06em;text-transform:uppercase;
+    padding:22px 24px;
+    background:var(--bg-cream);
+    color:var(--ink-dark);
+    border:none;outline:none;
+    width:100%;
+    transition:background .2s ease;
+    /* Pixel-stepped pill corners */
+    clip-path:polygon(
+      10px 0, calc(100% - 10px) 0,
+      calc(100% - 10px) 5px, 100% 5px,
+      100% calc(100% - 5px), calc(100% - 10px) calc(100% - 5px),
+      calc(100% - 10px) 100%, 10px 100%,
+      10px calc(100% - 5px), 0 calc(100% - 5px),
+      0 5px, 10px 5px
+    );
+  }
+  .register-input::placeholder,.register-select{color:rgba(0,0,0,0.45)}
+  .register-input:focus,.register-select:focus{background:#fff}
+  .register-select{appearance:none;-webkit-appearance:none;cursor:pointer;color:var(--ink-dark)}
+
+  /* Form submit button — uses unified .btn pixel style */
+  .register-btn{
+    /* Inherits all .btn styles via class addition */
+    display:inline-flex;align-items:center;justify-content:center;gap:12px;
+    padding:0 28px;
+    height:52px;
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:18px;
+    font-weight:400;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#fff;
+    background:var(--red);
+    border:none;cursor:pointer;
+    transition:filter .2s ease, transform .15s ease;
+    clip-path:polygon(
+      20px 0, calc(100% - 20px) 0,
+      calc(100% - 16px) 0, calc(100% - 16px) 4px,
+      calc(100% - 12px) 4px, calc(100% - 12px) 8px,
+      calc(100% - 8px) 8px, calc(100% - 8px) 12px,
+      calc(100% - 4px) 12px, calc(100% - 4px) 16px,
+      100% 16px, 100% 36px,
+      calc(100% - 4px) 36px, calc(100% - 4px) 40px,
+      calc(100% - 8px) 40px, calc(100% - 8px) 44px,
+      calc(100% - 12px) 44px, calc(100% - 12px) 48px,
+      calc(100% - 16px) 48px, calc(100% - 16px) 52px,
+      calc(100% - 20px) 52px, 20px 52px,
+      16px 52px, 16px 48px,
+      12px 48px, 12px 44px,
+      8px 44px, 8px 40px,
+      4px 40px, 4px 36px,
+      0 36px, 0 16px,
+      4px 16px, 4px 12px,
+      8px 12px, 8px 8px,
+      12px 8px, 12px 4px,
+      16px 4px, 16px 0
+    );
+    box-shadow:
+      inset 0 4px 0 0 rgba(255,255,255,0.20),
+      inset 0 -4px 0 0 rgba(0,0,0,0.32);
+  }
+  .register-btn:hover{filter:brightness(1.08);transform:translateY(-2px)}
+  .register-btn:active{transform:translateY(0);filter:brightness(0.94)}
+  .register-btn:disabled{opacity:0.7;cursor:wait;transform:none;filter:none}
+  .register-btn .arrow{transition:transform .2s;display:inline-block}
+  .register-btn:hover .arrow{transform:translateX(4px)}
+  .register-status{
+    margin:0;font-size:14px;color:var(--muted);
+    font-family:'Open Sans',sans-serif;text-align:center;min-height:20px;
+  }
+  .register-status[data-state="success"]{color:var(--green)}
+  .register-status[data-state="error"]{color:var(--red)}
+
+  /* Pixel pet decoration */
+  .hero__pet{
+    position:absolute;right:48px;top:120px;
+    width:140px;height:140px;
+    display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr);
+    pointer-events:none;
+    animation:bob 3s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .hero__pet i{display:block}
+  @media(max-width:980px){.hero__pet{display:none}}
+
+  /* ---------- Trust strip — yellow band, larger and more impactful ---------- */
+  .trust{
+    background:var(--yellow);color:var(--ink-dark);
+    padding:120px 0;border:none;
+  }
+  .trust__inner{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+  @media(max-width:760px){.trust__inner{grid-template-columns:1fr;gap:40px}}
+  .trust__item .num{
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-weight:400;
+    font-size:clamp(56px,8vw,112px);line-height:1;letter-spacing:0.02em;color:var(--blue);
+  }
+  .trust__item .lbl{margin-top:18px;color:#1a1a1a;font-size:17px;max-width:30ch;font-weight:600;line-height:1.45}
+
+  /* ---------- Section heading ---------- */
+  .section__head{margin-bottom:72px;max-width:780px}
+  .section__head .h2{margin-top:14px;margin-bottom:18px}
+  .section__head .lead{margin-top:10px}
+
+  /* ---------- Pillars (white cards on blue Program section) ---------- */
+  .pillar{
+    border:none;
+    border-radius:24px;
+    padding:36px 32px 40px;
+    background:#fff;
+    color:var(--ink-dark);
+    transition:transform .25s ease, box-shadow .25s ease;
+    min-height:280px;display:flex;flex-direction:column;justify-content:space-between;
+    box-shadow:0 4px 0 rgba(0,0,0,0.18);
+  }
+  /* base hover overridden by dramatic stamp effect below */
+  .pillar__num{
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-size:20px;letter-spacing:0.08em;
+    margin-bottom:24px;color:var(--blue);
+  }
+  .pillar__title{margin-bottom:14px;color:var(--ink-dark)}
+  .pillar__desc{color:#555;font-size:15px;line-height:1.55}
+  .pillar--purple .pillar__num{color:var(--purple)}
+  .pillar--green .pillar__num{color:var(--green)}
+  .pillar--orange .pillar__num{color:var(--orange)}
+  .pillar--blue .pillar__num{color:var(--blue)}
+  .pillar__tag{
+    margin-top:24px;display:inline-flex;align-items:center;gap:8px;
+    font-size:12px;color:var(--muted);
+    font-family:'Upheaval TT','Press Start 2P',monospace;letter-spacing:0.08em;text-transform:uppercase;
+  }
+
+  /* ---------- ICP tracks (portfolio cards) ---------- */
+  .track{
+    border-radius:28px;
+    padding:36px;
+    color:#fff;
+    min-height:420px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    position:relative;overflow:hidden;
+  }
+  .track--junior{background:var(--orange)}
+  .track--teen{background:var(--green)}
+  .track--operator{background:var(--blue)}
+  .track__top .pill{color:rgba(255,255,255,0.85)}
+  .track__age{
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-size:20px;letter-spacing:0.08em;
+    text-transform:uppercase;opacity:0.85;
+  }
+  .track__h{
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-weight:700;
+    font-size:36px;line-height:1.05;margin:14px 0 22px;letter-spacing:-0.02em;
+  }
+  .track__quote{
+    font-size:15px;line-height:1.45;margin-bottom:8px;opacity:0.95;
+  }
+  .track__quote strong{font-weight:600;display:block;font-size:11px;
+    text-transform:uppercase;letter-spacing:0.08em;opacity:0.7;margin-bottom:4px}
+  .track__price{
+    margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.25);
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-weight:700;font-size:22px;
+  }
+
+  /* ---------- Testimonials (white cards on pink section) ---------- */
+  .quote{
+    background:#fff;
+    border:none;
+    border-radius:20px;padding:28px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    min-height:240px;
+    color:var(--ink-dark);
+    box-shadow:0 4px 0 rgba(0,0,0,0.12);
+  }
+  .quote__text{font-size:17px;line-height:1.5;color:var(--ink-dark);margin-bottom:24px}
+  .quote__by{display:flex;align-items:center;gap:14px}
+  .avatar{
+    width:42px;height:42px;border-radius:999px;flex:none;
+    display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;
+  }
+  .avatar.a1{background:var(--purple)}
+  .avatar.a2{background:var(--green)}
+  .avatar.a3{background:var(--orange)}
+  .avatar.a4{background:var(--blue)}
+  .avatar.a5{background:var(--pink)}
+  .avatar.a6{background:var(--yellow);color:#1a1a1a}
+  .quote__name{font-size:14px;font-weight:600}
+  .quote__role{font-size:12px;color:var(--muted)}
+
+  /* ---------- Founder + Codepet (about section) ---------- */
+  .about{display:grid;grid-template-columns:1.1fr 0.9fr;gap:80px;align-items:center}
+  @media(max-width:980px){.about{grid-template-columns:1fr;gap:48px}}
+  .founder__photo{
+    aspect-ratio:4/5;
+    border-radius:32px;
+    background:
+      radial-gradient(ellipse at 30% 30%,rgba(255,255,255,0.4),transparent 60%),
+      linear-gradient(135deg,#3a2e25,#1a1410);
+    position:relative;overflow:hidden;
+    border:1px solid var(--border-cream);
+  }
+  .founder__photo::after{
+    content:"ASTRO TRAN";
+    position:absolute;left:24px;bottom:24px;
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-size:18px;letter-spacing:0.1em;
+    color:rgba(255,255,255,0.65);
+  }
+  .founder__creds{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+  .cred{
+    border:1px solid var(--border-cream);
+    padding:8px 14px;border-radius:999px;
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;
+    color:#1a1a1a;background:#fff;
+  }
+
+  .pet-explain{
+    margin-top:64px;padding-top:48px;border-top:1px solid var(--border-cream);
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;
+  }
+  @media(max-width:760px){.pet-explain{grid-template-columns:1fr;gap:24px}}
+  .pet-explain h3{margin-bottom:14px}
+  .pet-explain p{font-size:16px;color:#444;line-height:1.6}
+
+  /* ---------- Curriculum (white cards on green section) ---------- */
+  .timeline{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+    border-radius:20px;overflow:visible;
+    background:transparent;
+  }
+  @media(max-width:980px){.timeline{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.timeline{grid-template-columns:1fr}}
+  .phase{
+    background:#fff;color:var(--ink-dark);
+    padding:32px 26px;display:flex;flex-direction:column;gap:14px;min-height:200px;
+    border-radius:20px;
+    box-shadow:0 4px 0 rgba(0,0,0,0.18);
+  }
+  .phase__wk{font-family:'Upheaval TT','Press Start 2P',monospace;font-size:18px;letter-spacing:0.08em;text-transform:uppercase}
+  .phase--1 .phase__wk{color:var(--purple)}
+  .phase--2 .phase__wk{color:var(--orange)}
+  .phase--3 .phase__wk{color:var(--red)}
+  .phase--4 .phase__wk{color:var(--blue)}
+  .phase__h{
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-weight:400;font-size:22px;
+    letter-spacing:0.02em;line-height:1.15;text-transform:uppercase;color:var(--ink-dark);
+  }
+  .phase__desc{font-size:14px;color:#555;line-height:1.55;margin-top:auto}
+  /* phase hover handled in dramatic stamp section below */
+
+  /* ---------- Pricing ---------- */
+  .price{
+    border:1px solid var(--border-cream);background:#fff;
+    border-radius:24px;padding:40px 36px;
+    color:#1a1a1a;display:flex;flex-direction:column;gap:24px;
+  }
+  .price--featured{
+    background:var(--yellow);color:var(--ink-dark);border-color:var(--yellow);position:relative;
+  }
+  .price--featured .price__list li{color:#1a1a1a}
+  .price__tag{
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-size:18px;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--purple);
+  }
+  .price--featured .price__tag{color:var(--red)}
+  .price--featured .price__num small{color:#5a5a55}
+  .price--featured .price__list li::before{color:var(--red)}
+  .price--featured .price__badge{background:var(--red);color:#fff}
+  .price__num{
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-weight:700;
+    font-size:64px;line-height:1;letter-spacing:-0.03em;
+  }
+  .price__num small{font-size:18px;font-weight:500;color:#777;margin-left:6px}
+  .price__list{list-style:none;display:flex;flex-direction:column;gap:10px;margin:8px 0}
+  .price__list li{font-size:14px;display:flex;align-items:flex-start;gap:10px}
+  .price__list li::before{
+    content:"✦";color:var(--purple);flex:none;font-weight:700;
+    font-size:18px;line-height:1.2;display:inline-block;
+    transition:transform .25s ease;
+  }
+  .price__list li:hover::before{transform:rotate(90deg) scale(1.15)}
+  /* Featured (yellow) card overrides — keep these LAST so they win cascade */
+  .price--featured .price__num small{color:#5a5a55}
+  .price--featured .price__list li::before{color:var(--red)}
+  .price__badge{
+    position:absolute;top:24px;right:24px;
+    background:var(--yellow);color:#1a1a1a;
+    padding:6px 12px;border-radius:999px;
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq__list{display:flex;flex-direction:column;border-top:1px solid var(--border-dim)}
+  .faq__item{border-bottom:1px solid var(--border-dim);padding:28px 0}
+  .faq__q{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:24px;cursor:pointer;
+    font-family:'Upheaval TT','Press Start 2P',monospace;font-weight:600;font-size:20px;letter-spacing:-0.01em;
+    color:var(--ink);list-style:none;
+  }
+  .faq__q::-webkit-details-marker{display:none}
+  .faq__q::after{content:"+";font-size:28px;font-weight:400;color:var(--muted);transition:transform .2s}
+  details[open] .faq__q::after{content:"−"}
+  .faq__a{margin-top:14px;color:var(--muted);max-width:70ch;font-size:15px;line-height:1.6}
+
+  /* ---------- Final CTA ---------- */
+  .final-cta{padding:120px 0;text-align:center}
+  .final-cta .display{margin-bottom:24px}
+  .final-cta .lead{margin:0 auto 36px;color:rgba(255,255,255,0.85)}
+
+  /* ---------- Footer ---------- */
+  footer{padding:60px 0 36px;background:#1a1a1a;color:#FCFAED}
+  .footer__row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+  .footer__links{display:flex;gap:24px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,0.6)}
+  .footer__links a:hover{color:#fff}
+  .footer__legal{font-size:12px;color:rgba(255,255,255,0.6);font-family:'Upheaval TT','Press Start 2P',monospace;letter-spacing:0.08em;text-transform:uppercase}
+  footer .brand,footer .nav__brand-academy{color:#FCFAED}
+  footer .brand__dot{background:var(--purple)}
+
+  /* ---------- Pixel pet (SVG-style with divs) ---------- */
+  .pet{display:grid;grid-template-columns:repeat(8,12px);grid-template-rows:repeat(8,12px);gap:0}
+  .pet i{width:12px;height:12px}
+  .pet i.p{background:var(--purple)}
+  .pet i.b{background:#1a1a1a}
+  .pet i.w{background:#fff}
+
+  /* small helpers */
+  .gap-l{height:48px}
+  .center{text-align:center}
+  .underline-accent{
+    background-image:linear-gradient(transparent 65%,rgba(123,44,191,0.35) 0);
+    padding:0 4px;
+  }
+
+  /* ============================================================
+     ANIMATIONS — Zeentra-inspired
+     ============================================================ */
+
+  /* Keyframes */
+  @keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+  @keyframes bounceIn {
+    0%   { opacity: 0; transform: scale(0.3); }
+    50%  { opacity: 1; transform: scale(1.08); }
+    70%  { transform: scale(0.96); }
+    100% { transform: scale(1); }
+  }
+  @keyframes wordRise {
+    from { opacity: 0; transform: translateY(40%); filter: blur(8px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  /* Scroll reveal — base hidden state, in-view state */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
+    will-change: opacity, transform;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal--scale {
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity .7s ease-out, transform .7s cubic-bezier(.34,1.56,.64,1);
+  }
+  .reveal--scale.in { opacity: 1; transform: scale(1); }
+  /* Stagger children */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
+  }
+  .reveal-stagger.in > * { opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(1) { transition-delay: .05s }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: .15s }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: .25s }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: .35s }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: .45s }
+  .reveal-stagger.in > *:nth-child(6) { transition-delay: .55s }
+
+  /* Hero word-by-word entrance */
+  .hero__title .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40%);
+    filter: blur(8px);
+    animation: wordRise .9s cubic-bezier(.22,.61,.36,1) forwards;
+  }
+  .hero__title .word:nth-child(1){animation-delay:.1s}
+  .hero__title .word:nth-child(2){animation-delay:.18s}
+  .hero__title .word:nth-child(3){animation-delay:.26s}
+  .hero__title .word:nth-child(4){animation-delay:.34s}
+  .hero__title .word:nth-child(5){animation-delay:.42s}
+  .hero__title .word:nth-child(6){animation-delay:.5s}
+  .hero__title .word:nth-child(7){animation-delay:.58s}
+  .hero__title .word:nth-child(8){animation-delay:.66s}
+  .hero__title .word:nth-child(9){animation-delay:.74s}
+
+  /* Spinning circular badge — Zeentra-style award stamp */
+  .badge-spin {
+    width: 160px; height: 160px;
+    position: absolute;
+    display: grid; place-items: center;
+  }
+  .badge-spin__ring {
+    position: absolute; inset: 0;
+    animation: spin 22s linear infinite;
+  }
+  .badge-spin__ring svg { width: 100%; height: 100%; }
+  .badge-spin__ring text { font-family: 'Upheaval TT', monospace; font-size: 14px; letter-spacing: 0.18em; fill: var(--ink-dark); }
+  .badge-spin__center {
+    width: 56px; height: 56px;
+    background: var(--purple);
+    border-radius: 999px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    z-index: 1;
+  }
+
+  /* Pixel-art section label — stepped octagon shape */
+  .blob {
+    display: inline-block;
+    padding: 22px 36px;
+    color: #fff;
+    font-family: 'Upheaval TT','Press Start 2P',monospace;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1;
+    background: var(--blob-c, var(--orange));
+    /* Stepped pixel-art corners — looks like chunky 8-bit corners */
+    clip-path: polygon(
+      12px 0, calc(100% - 12px) 0,
+      calc(100% - 12px) 6px, calc(100% - 6px) 6px,
+      calc(100% - 6px) 12px, 100% 12px,
+      100% calc(100% - 12px), calc(100% - 6px) calc(100% - 12px),
+      calc(100% - 6px) calc(100% - 6px), calc(100% - 12px) calc(100% - 6px),
+      calc(100% - 12px) 100%, 12px 100%,
+      12px calc(100% - 6px), 6px calc(100% - 6px),
+      6px calc(100% - 12px), 0 calc(100% - 12px),
+      0 12px, 6px 12px,
+      6px 6px, 12px 6px
+    );
+  }
+  .blob > span { display: inline-block; }
+  .blob::before, .blob::after { display: none; }
+  .blob--orange { --blob-c: var(--orange); }
+  .blob--green  { --blob-c: var(--green); }
+  .blob--blue   { --blob-c: var(--blue); }
+  .blob--purple { --blob-c: var(--purple); }
+  .blob--yellow { --blob-c: var(--yellow); color: #1a1a1a; }
+  .blob--pink   { --blob-c: var(--pink); color: #1a1a1a; }
+  .blob--red    { --blob-c: var(--red); }
+
+  /* Animated stat counter */
+  .trust__item .num { font-variant-numeric: tabular-nums; }
+
+  /* === DRAMATIC HOVER — pixel-game stamp lift with colored offset shadow === */
+  .pillar, .quote, .price, .phase {
+    transition: transform .45s cubic-bezier(.34,1.56,.64,1),
+                box-shadow .35s cubic-bezier(.4,0,.2,1);
+    will-change: transform, box-shadow;
+  }
+
+  /* PHASE CARDS — green section, each phase gets matching colored shadow */
+  .phase:hover { transform: translateY(-14px) rotate(-1.2deg) scale(1.025); }
+  .phase--1:hover { box-shadow: 0 18px 0 var(--purple), 0 22px 36px rgba(149,56,207,0.35); }
+  .phase--2:hover { box-shadow: 0 18px 0 var(--orange), 0 22px 36px rgba(245,131,69,0.35); }
+  .phase--3:hover { box-shadow: 0 18px 0 var(--red),    0 22px 36px rgba(226,75,74,0.35); }
+  .phase--4:hover { box-shadow: 0 18px 0 var(--blue),   0 22px 36px rgba(28,64,207,0.35); }
+  .phase__wk { display: inline-block; transition: transform .45s cubic-bezier(.34,1.56,.64,1); transform-origin: left center; }
+  .phase:hover .phase__wk { transform: scale(1.18) rotate(-3deg); }
+
+  /* PILLAR CARDS — blue section, each gets contrasting colored shadow */
+  .pillar:hover { transform: translateY(-14px) rotate(1.2deg) scale(1.025); }
+  .pillar--purple:hover { box-shadow: 0 18px 0 var(--purple), 0 22px 36px rgba(149,56,207,0.4); }
+  .pillar--green:hover  { box-shadow: 0 18px 0 var(--green),  0 22px 36px rgba(2,153,2,0.4); }
+  .pillar--orange:hover { box-shadow: 0 18px 0 var(--orange), 0 22px 36px rgba(245,131,69,0.4); }
+  .pillar--blue:hover   { box-shadow: 0 18px 0 var(--yellow), 0 22px 36px rgba(252,190,29,0.5); }
+  .pillar__num { display: inline-block; transition: transform .45s cubic-bezier(.34,1.56,.64,1); transform-origin: left center; }
+  .pillar:hover .pillar__num { transform: scale(1.2) rotate(-3deg); }
+
+  /* QUOTE CARDS — pink section, purple shadow for contrast */
+  .quote:hover {
+    transform: translateY(-12px) rotate(-1deg) scale(1.03);
+    box-shadow: 0 16px 0 var(--purple), 0 20px 32px rgba(149,56,207,0.35);
+  }
+  .quote .avatar { transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+  .quote:hover .avatar { transform: scale(1.15) rotate(-8deg); }
+
+  /* PRICE CARDS — purple section, contrasting shadows */
+  .price:hover { transform: translateY(-14px) rotate(-0.8deg) scale(1.02); }
+  .price:hover { box-shadow: 0 18px 0 var(--yellow), 0 22px 36px rgba(252,190,29,0.5); }
+  .price--featured:hover { box-shadow: 0 18px 0 var(--red), 0 22px 36px rgba(226,75,74,0.5); }
+  .price__num { display: inline-block; transition: transform .45s cubic-bezier(.34,1.56,.64,1); transform-origin: left center; }
+  .price:hover .price__num { transform: scale(1.05) rotate(-1deg); }
+
+  /* Scalloped section divider — small white half-circles biting into next section */
+  .scallop {
+    position: relative;
+    height: 32px;
+    background-image: radial-gradient(circle at 20px 0, var(--scallop-c,#fff) 18px, transparent 19px);
+    background-size: 40px 32px;
+    background-repeat: repeat-x;
+    background-position: 0 -1px;
+  }
+  .scallop--up { transform: rotate(180deg); }
+
+  /* Hide spinning badge & decorative stars on mobile */
+  @media (max-width: 980px) {
+    .badge-spin, .deco-star { display: none; }
+  }
+
+  /* Floating decorative pixel asterisks */
+  .deco-star {
+    position: absolute;
+    width: 24px; height: 24px;
+    color: var(--yellow);
+    animation: float 4s ease-in-out infinite;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+  .deco-star svg { width: 100%; height: 100%; fill: currentColor; }
+  .deco-star--2 { animation-delay: 1.2s; }
+  .deco-star--3 { animation-delay: 2.4s; }
+
+  /* Official Codepet pet imagery — pixel-perfect rendering, soft bob */
+  .hero__pets {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: clamp(8px, 1.4vw, 24px);
+    margin-top: 36px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .pet-img {
+    width: clamp(56px, 9vw, 112px);
+    height: auto;
+    flex: 0 1 auto;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    animation: float 3s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+    transition: transform .25s ease;
+  }
+  .pet-img:hover { transform: scale(1.12) rotate(-4deg); }
+  @media (max-width: 760px) {
+    .hero__pets { gap: 4px; margin-top: 24px; }
+    .pet-img { width: clamp(36px, 11vw, 60px); }
+  }
+
+  /* Small pet for cards */
+  .card-pet {
+    width: 88px; height: auto;
+    position: absolute;
+    bottom: 22px; right: 22px;
+    image-rendering: pixelated;
+    transition: transform .3s ease;
+    pointer-events: none;
+  }
+  .track:hover .card-pet { transform: scale(1.15) rotate(8deg); }
+
+  /* Pet-explain illustration block */
+  .pet-explain__visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .pet-explain__visual img {
+    width: 100%; max-width: 140px;
+    image-rendering: pixelated;
+    animation: float 3.5s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+
+  /* Phase cards: slight pop on hover */
+  /* phase hover handled in main rule above */
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal--scale, .reveal-stagger > * { opacity: 1; transform: none; transition: none; }
+    .hero__title .word { opacity: 1; transform: none; filter: none; animation: none; }
+    .badge-spin__ring { animation: none; }
+    .deco-star, .hero__pet { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<nav class="nav" aria-label="Primary">
+  <div class="nav__inner">
+    <div class="nav__pill">
+      <a href="#" class="nav__brand" aria-label="Codepet Academy">
+        <img src="codepet-wordmark.png" alt="Codepet" class="nav__brand-img">
+        <span class="nav__brand-academy">ACADEMY</span>
+      </a>
+      <div class="nav__center">
+        <a href="#program">Program <span class="plus">+</span></a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <a href="#apply" class="nav__cta">Apply <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============== HERO ============== -->
+<header class="hero container" style="position:relative;text-align:center">
+  <div class="hero__meta" style="justify-content:center">
+    <span class="chip">◉ COHORT 1 · STARTS JUNE 17, 2026</span>
+    <span class="chip">SEATS 12 / 24</span>
+  </div>
+  <h1 class="display display--xxl hero__title">
+    <span class="word">Ship</span> <span class="word">a</span> <span class="word">real</span> <span class="word">product.</span><br>
+    <span class="word">Taught</span> <span class="word">by</span> <span class="word">an</span> <span class="word accent">AI&nbsp;pet</span><br>
+    <span class="word">that builds with you.</span>
+  </h1>
+  <p class="hero__sub reveal" style="margin-left:auto;margin-right:auto">
+    A 12-week founder-led cohort for ages 12 to 30. Built with Cursor, Claude, and an AI companion
+    that ships beside you — not a syllabus, not a certificate, a launched product real customers
+    will pay for.
+  </p>
+  <form class="register-form reveal" id="registerForm" novalidate>
+    <div class="row">
+      <input type="text" name="name" placeholder="Your name" aria-label="Your name" required class="register-input">
+      <input type="email" name="email" placeholder="Your email" aria-label="Your email" required class="register-input">
+    </div>
+    <button type="submit" class="register-btn" id="registerBtn">Sign me up</button>
+    <p id="registerStatus" class="register-status" role="status" aria-live="polite"></p>
+  </form>
+
+  <!-- Decorative floating stars (visible on white hero) -->
+  <div class="deco-star" style="right:240px;top:180px;color:var(--red)" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M12 0 L14 9 L23 12 L14 15 L12 24 L10 15 L1 12 L10 9 Z"/></svg>
+  </div>
+  <div class="deco-star deco-star--2" style="left:35%;top:80px;color:var(--blue);width:18px;height:18px" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M12 0 L14 9 L23 12 L14 15 L12 24 L10 15 L1 12 L10 9 Z"/></svg>
+  </div>
+  <div class="deco-star deco-star--3" style="left:8%;top:340px;color:var(--green);width:20px;height:20px" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M12 0 L14 9 L23 12 L14 15 L12 24 L10 15 L1 12 L10 9 Z"/></svg>
+  </div>
+
+  <!-- Official Codepet pet row -->
+  <div class="hero__pets" aria-hidden="true">
+    <img src="pets/1-pink-bear.png" alt="" class="pet-img" style="--d:0s">
+    <img src="pets/2-green-owl.png" alt="" class="pet-img" style="--d:.15s">
+    <img src="pets/3-orange-fox.png" alt="" class="pet-img" style="--d:.3s">
+    <img src="pets/4-purple-byte.png" alt="" class="pet-img" style="--d:.45s">
+    <img src="pets/5-yellow-bear.png" alt="" class="pet-img" style="--d:.6s">
+    <img src="pets/6-red-bear.png" alt="" class="pet-img" style="--d:.75s">
+    <img src="pets/7-blue-penguin.png" alt="" class="pet-img" style="--d:.9s">
+  </div>
+</header>
+
+<!-- ============== TRUST STRIP ============== -->
+<section class="trust">
+  <div class="container trust__inner reveal-stagger">
+    <div class="trust__item">
+      <div class="num"><span data-count-to="4.2" data-prefix="$" data-suffix="B" data-decimals="1">$0B</span></div>
+      <div class="lbl">Vietnam private edtech market by 2027 (Statista)</div>
+    </div>
+    <div class="trust__item">
+      <div class="num"><span data-count-to="73" data-suffix="%">0%</span></div>
+      <div class="lbl">Of Vietnamese parents say AI fluency is critical by age 14 (HSBC)</div>
+    </div>
+    <div class="trust__item">
+      <div class="num"><span data-count-to="20">0</span></div>
+      <div class="lbl">AI agents Astro Tran used to build &amp; operate MURROR</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PILLARS / PROGRAM ============== -->
+<section class="section section--blue" id="program">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="blob blob--orange"><span>PROGRAM</span></span>
+      <h2 class="h2" style="margin-top:24px">Coding camps teach syntax. Schools teach theory. Neither teaches <span class="underline-accent">shipping.</span></h2>
+      <p class="lead">Twelve weeks, four phases, one outcome: you launch an AI-agent product real customers pay for. No certificates. No demo apps. A live business.</p>
+    </div>
+
+    <div class="grid grid--4 reveal-stagger">
+      <article class="pillar pillar--purple">
+        <div>
+          <div class="pillar__num">01 · WK 1–3</div>
+          <h3 class="h3 pillar__title">Mindset &amp; Idea</h3>
+          <p class="pillar__desc">Founder thinking. Tear apart 10 real AI-agent products. Pick a wedge. Run 20 customer interviews before you write a line of code.</p>
+        </div>
+        <div class="pillar__tag">✦ Validated wedge</div>
+      </article>
+      <article class="pillar pillar--green">
+        <div>
+          <div class="pillar__num">02 · WK 4–6</div>
+          <h3 class="h3 pillar__title">Build the Agent</h3>
+          <p class="pillar__desc">AI-native stack — Cursor, Claude, n8n, agent frameworks. Architect, build, and ship V1 end-to-end. Astro reviews weekly.</p>
+        </div>
+        <div class="pillar__tag">✦ Live V1</div>
+      </article>
+      <article class="pillar pillar--orange">
+        <div>
+          <div class="pillar__num">03 · WK 7–9</div>
+          <h3 class="h3 pillar__title">Launch as a Startup</h3>
+          <p class="pillar__desc">Pricing. Payments. Legal. Brand. Launch day, your first 10 paying customers. Talk to every one of them in week one.</p>
+        </div>
+        <div class="pillar__tag">✦ First $</div>
+      </article>
+      <article class="pillar pillar--blue">
+        <div>
+          <div class="pillar__num">04 · WK 10–12</div>
+          <h3 class="h3 pillar__title">Scale or Pivot</h3>
+          <p class="pillar__desc">Read your P&amp;L like a real founder. Growth channels. Demo Day. A 90-day post-program plan to keep going — or kill it cleanly.</p>
+        </div>
+        <div class="pillar__tag">✦ Demo Day</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CURRICULUM TIMELINE ============== -->
+<section class="section section--green" id="curriculum">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="blob blob--blue"><span>CURRICULUM</span></span>
+      <h2 class="h2" style="margin-top:24px">From idea to launched product, week by week.</h2>
+      <p class="lead">A live 12-week cohort. Astro coaches the room. Your Codepet ships beside you between sessions.</p>
+    </div>
+
+    <div class="timeline reveal-stagger">
+      <div class="phase phase--1">
+        <div class="phase__wk">WEEKS 1–3</div>
+        <div class="phase__h">Mindset &amp; idea</div>
+        <div class="phase__desc">Operator thinking · 10 product tear-downs · pick your wedge · 20 customer interviews</div>
+      </div>
+      <div class="phase phase--2">
+        <div class="phase__wk">WEEKS 4–6</div>
+        <div class="phase__h">Build the agent</div>
+        <div class="phase__desc">Cursor + Claude + n8n · architect &amp; ship V1 · APIs, payments, databases · weekly review</div>
+      </div>
+      <div class="phase phase--3">
+        <div class="phase__wk">WEEKS 7–9</div>
+        <div class="phase__h">Launch as a startup</div>
+        <div class="phase__desc">Pricing &amp; payments · legal &amp; brand · launch day · first 10 paying customers · talk to all of them</div>
+      </div>
+      <div class="phase phase--4">
+        <div class="phase__wk">WEEKS 10–12</div>
+        <div class="phase__h">Scale or pivot</div>
+        <div class="phase__desc">Read your P&amp;L · growth channels · Demo Day · 90-day post-program plan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== TESTIMONIALS ============== -->
+<section class="section section--pink">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="blob blob--purple"><span>VOICES</span></span>
+      <h2 class="h2" style="margin-top:24px">What parents and students will say after Cohort 1.</h2>
+      <p class="lead" style="font-size:14px;font-style:italic">Sample copy — replace with real testimonials post-launch.</p>
+    </div>
+
+    <div class="grid grid--3 reveal-stagger">
+      <div class="quote">
+        <p class="quote__text">"My daughter shipped a study-buddy agent that 40 of her classmates pay for. Her university essay basically writes itself now."</p>
+        <div class="quote__by">
+          <div class="avatar a1">AN</div>
+          <div><div class="quote__name">Anh Nguyễn</div><div class="quote__role">Parent · Teen Founder track</div></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p class="quote__text">"I came in not knowing what an API was. Twelve weeks later I had paying users and a real Stripe dashboard. That's the part nobody else teaches."</p>
+        <div class="quote__by">
+          <div class="avatar a2">MD</div>
+          <div><div class="quote__name">Minh Đặng</div><div class="quote__role">Young Operator · 24</div></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p class="quote__text">"Astro doesn't lecture. He builds with you. By week six my son was reviewing his own pull requests and pushing to production."</p>
+        <div class="quote__by">
+          <div class="avatar a3">LT</div>
+          <div><div class="quote__name">Linh Trần</div><div class="quote__role">Parent · Junior Maker</div></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p class="quote__text">"The Codepet feels like a co-founder. It catches what I miss, ships when I sleep, and pushes back when I'm being lazy."</p>
+        <div class="quote__by">
+          <div class="avatar a4">HP</div>
+          <div><div class="quote__name">Hà Phạm</div><div class="quote__role">Teen Founder · 17</div></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p class="quote__text">"My son went from making me Roblox avatars to running a real P&amp;L. He still asks for screen time but now it's because he's checking churn."</p>
+        <div class="quote__by">
+          <div class="avatar a5">DV</div>
+          <div><div class="quote__name">Diệu Vũ</div><div class="quote__role">Parent · Junior Maker</div></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p class="quote__text">"Best money I've ever spent on a course. I quit my Big-4 job in week 9 and I haven't looked back. The cohort is the moat."</p>
+        <div class="quote__by">
+          <div class="avatar a6">TL</div>
+          <div><div class="quote__name">Tâm Lê</div><div class="quote__role">Young Operator · Cohort 1</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ABOUT — FOUNDER + CODEPET ============== -->
+<section class="section section--orange" id="about">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="blob blob--purple"><span>TEAM</span></span>
+      <h2 class="h2" style="margin-top:24px">Founder-led. Pet-assisted. Built in Vietnam.</h2>
+    </div>
+
+    <div class="about">
+      <div class="founder__photo" aria-hidden="true"></div>
+      <div>
+        <h3 class="h3" style="margin-bottom:14px;color:#fff">Astro Tran — your coach for 12 weeks.</h3>
+        <p style="font-size:17px;color:rgba(255,255,255,0.92);line-height:1.65;margin-bottom:14px">
+          Twenty years across Google and Meta. Built and currently operates MURROR using a team of just twenty AI agents.
+          Lives in HCMC. Teaches every cohort live, personally — no associates, no TAs reading from a deck.
+        </p>
+        <p style="font-size:17px;color:rgba(255,255,255,0.92);line-height:1.65">
+          Codepet exists because the next great founder will be born the moment they're invested in early. Astro thinks that
+          moment is happening to teenagers in Saigon and Hanoi right now.
+        </p>
+        <div class="founder__creds">
+          <span class="cred">EX-GOOGLE</span>
+          <span class="cred">EX-META</span>
+          <span class="cred">FOUNDER · MURROR</span>
+          <span class="cred">HCMC</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pet-explain reveal">
+      <div>
+        <span class="blob blob--yellow"><span>THE PET</span></span>
+        <h3 class="h2" style="margin-top:24px">A pet that ships products with you.</h3>
+      </div>
+      <div>
+        <p style="color:rgba(255,255,255,0.92)">
+          Every student gets a Codepet — an AI companion that lives inside Cursor and your browser. It pair-programs,
+          critiques your launch copy, watches your dashboards, and nudges you when churn ticks up. Between cohort
+          sessions, the Codepet is the difference between "I meant to ship" and "I shipped."
+        </p>
+        <p style="margin-top:18px;color:rgba(255,255,255,0.92)">
+          It's the part that turns a 12-week course into a 12-month operator. Nobody else has this.
+        </p>
+        <div class="pet-explain__visual">
+          <img src="pets/2-green-owl.png" alt="Codepet companion" style="--d:0s">
+          <img src="pets/1-pink-bear.png" alt="Codepet companion" style="--d:.4s">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PRICING ============== -->
+<section class="section section--purple" id="pricing">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="blob blob--orange"><span>PRICING</span></span>
+      <h2 class="h2" style="margin-top:24px">Two ways in. Same founder. Same outcome.</h2>
+      <p class="lead">Cancel after any cohort, no commitment. Refund within the first two weeks if it's not for you.</p>
+    </div>
+
+    <div class="grid grid--2 reveal-stagger">
+      <article class="price">
+        <div class="price__tag">3-MONTH PLAN</div>
+        <div class="price__num">$3,000<small>/ cohort</small></div>
+        <div style="font-size:14px;color:#444">$1,000 / month, paid every 12 weeks.</div>
+        <ul class="price__list">
+          <li>One full 12-week cohort</li>
+          <li>Astro live, weekly</li>
+          <li>Codepet companion access</li>
+          <li>Demo Day spot</li>
+          <li>Cancel after current cohort, no commitment</li>
+        </ul>
+        <a href="#apply" class="btn btn--purple btn--lg" style="align-self:flex-start">Apply for 3-month <span class="arrow">→</span></a>
+      </article>
+
+      <article class="price price--featured">
+        <span class="price__badge">SAVE 20%</span>
+        <div class="price__tag">ANNUAL PLAN</div>
+        <div class="price__num">$9,600<small>/ year</small></div>
+        <div style="font-size:14px;color:#1a1a1a">$800 / month — four back-to-back cohorts.</div>
+        <ul class="price__list">
+          <li>Four cohorts, one continuous build</li>
+          <li>Lock in a full year of founder access</li>
+          <li>Priority Demo Day slot</li>
+          <li>Alumni Codepet network</li>
+          <li>One-on-one quarterly with Astro</li>
+        </ul>
+        <a href="#apply" class="btn btn--primary btn--lg" style="align-self:flex-start">Apply for annual <span class="arrow">→</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FAQ ============== -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="blob blob--green"><span>FAQ</span></span>
+      <h2 class="h2" style="color:var(--ink-dark);margin-top:24px">Things parents and students ask first.</h2>
+    </div>
+
+    <div class="faq__list" style="border-color:var(--border-cream)">
+      <details class="faq__item" style="border-color:var(--border-cream)" open>
+        <summary class="faq__q" style="color:var(--ink-dark)">Does my child need to know how to code?<span></span></summary>
+        <div class="faq__a" style="color:#444">No. Cohort 1 is designed for absolute beginners. We teach the AI-native stack — Cursor, Claude, n8n — which compresses months of syntax into weeks of shipping.</div>
+      </details>
+      <details class="faq__item" style="border-color:var(--border-cream)">
+        <summary class="faq__q" style="color:var(--ink-dark)">What language is the cohort taught in?<span></span></summary>
+        <div class="faq__a" style="color:#444">Bilingual Vietnamese / English. Astro switches based on the room. All written materials are available in both languages.</div>
+      </details>
+      <details class="faq__item" style="border-color:var(--border-cream)">
+        <summary class="faq__q" style="color:var(--ink-dark)">Online or in-person?<span></span></summary>
+        <div class="faq__a" style="color:#444">Live online for everyone. Optional in-person studio sessions in HCMC (District 2) and Hanoi (Tay Ho) for cohort members based locally.</div>
+      </details>
+      <details class="faq__item" style="border-color:var(--border-cream)">
+        <summary class="faq__q" style="color:var(--ink-dark)">How much time does my kid need to commit?<span></span></summary>
+        <div class="faq__a" style="color:#444">Two live sessions per week (90 min each), plus 4–6 hours of building. We expect this to feel like a serious extracurricular — not a school subject.</div>
+      </details>
+      <details class="faq__item" style="border-color:var(--border-cream)">
+        <summary class="faq__q" style="color:var(--ink-dark)">Can parents see progress?<span></span></summary>
+        <div class="faq__a" style="color:#444">Yes — every parent gets a weekly dashboard with code shipped, customer interviews logged, and revenue (when applicable). No mystery.</div>
+      </details>
+      <details class="faq__item" style="border-color:var(--border-cream)">
+        <summary class="faq__q" style="color:var(--ink-dark)">What's the refund policy?<span></span></summary>
+        <div class="faq__a" style="color:#444">Full refund within the first two weeks of your first cohort, no questions asked. After that, you can cancel future cohorts but the current one is final.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FINAL CTA ============== -->
+<section class="section section--red final-cta" id="apply">
+  <div class="container reveal">
+    <span class="blob blob--yellow"><span>APPLY</span></span>
+    <h2 class="display display--xl" style="margin-top:24px">Cohort 1 starts<br>June 17, 2026.</h2>
+    <p class="lead">12 seats remaining. Founder-led. One product shipped. Either you go in, or you keep reading articles like this one.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="#" class="btn btn--white btn--lg">Apply for next cohort <span class="arrow">→</span></a>
+      <a href="#" class="btn btn--black btn--lg">Talk to Astro first</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="container">
+    <div class="footer__row">
+      <a href="#" class="brand"><span class="brand__dot"></span> Codepet Academy</a>
+      <div class="footer__links">
+        <a href="#program">Program</a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="mailto:hello@codepet.academy">Contact</a>
+      </div>
+      <div class="footer__legal">VN · EN · OUTCAST © 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hide-on-scroll-down, show-on-scroll-up navbar — same pattern as Zeentra
+  (function(){
+    const nav = document.querySelector('.nav');
+    if(!nav) return;
+    let lastY = window.scrollY;
+    let ticking = false;
+    function update(){
+      const y = window.scrollY;
+      if (y > lastY && y > 120) {
+        nav.classList.add('nav--hidden');
+      } else if (y < lastY) {
+        nav.classList.remove('nav--hidden');
+      }
+      lastY = y;
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+
+  // Scroll-triggered reveals — IntersectionObserver
+  (function(){
+    const targets = document.querySelectorAll('.reveal, .reveal--scale, .reveal-stagger');
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(t => t.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    targets.forEach(t => io.observe(t));
+  })();
+
+  // Registration form — POST to /api/register, which calls Resend
+  (function(){
+    const form = document.getElementById('registerForm');
+    if (!form) return;
+    const btn = document.getElementById('registerBtn');
+    const statusEl = document.getElementById('registerStatus');
+    const originalBtnText = btn.textContent;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(form));
+
+      // Client-side validation
+      if (!formData.name || !formData.email) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'Please fill in both fields.';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'That email looks off — please check it.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      statusEl.dataset.state = '';
+      statusEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Submission failed.');
+
+        btn.textContent = 'Got it ✓';
+        statusEl.dataset.state = 'success';
+        statusEl.textContent = "Thanks — we'll be in touch about Cohort 1.";
+        form.reset();
+        setTimeout(() => {
+          btn.textContent = originalBtnText;
+          btn.disabled = false;
+        }, 4000);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = originalBtnText;
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = err.message || 'Something went wrong. Try again?';
+      }
+    });
+  })();
+
+  // Animated number counters — fires when stat enters viewport
+  (function(){
+    const counters = document.querySelectorAll('[data-count-to]');
+    if (!counters.length) return;
+    const animate = (el) => {
+      const target = parseFloat(el.dataset.countTo);
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const duration = 1400;
+      const start = performance.now();
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        // ease out cubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        const value = (target * eased).toFixed(decimals);
+        el.textContent = prefix + value + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    if (!('IntersectionObserver' in window)) {
+      counters.forEach(animate);
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animate(entry.target);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(c => io.observe(c));
+  })();
+</script>
+
+</body>
+</html>
