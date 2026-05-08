@@ -449,6 +449,23 @@
     margin:-2px 0 0;font-size:13px;color:var(--muted);
     font-family:'Open Sans',sans-serif;text-align:center;
   }
+  /* Full registration form (in dedicated section) — wider with textarea */
+  .register-form--full{max-width:640px}
+  .register-textarea{
+    font-family:'Open Sans',sans-serif !important;
+    text-transform:none !important;
+    letter-spacing:0.02em !important;
+    font-size:15px !important;
+    padding:22px 28px;
+    resize:vertical;
+    min-height:120px;
+    line-height:1.5;
+  }
+  .register-textarea::placeholder{
+    color:rgba(0,0,0,0.45);
+    text-transform:none;
+    letter-spacing:0.02em;
+  }
 
   /* Pixel pet decoration */
   .hero__pet{
@@ -479,6 +496,9 @@
   .section__head{margin-bottom:72px;max-width:780px}
   .section__head .h2{margin-top:14px;margin-bottom:18px}
   .section__head .lead{margin-top:10px}
+  /* Centered CTA at the end of each section, pointing to #register */
+  .section__cta{display:flex;justify-content:center;margin-top:64px}
+  @media(max-width:760px){.section__cta{margin-top:40px}}
 
   /* ---------- Pillars (white cards on blue Program section) ---------- */
   .pillar{
@@ -981,9 +1001,9 @@
       <div class="nav__center">
         <a href="#program">Program <span class="plus">+</span></a>
         <a href="#curriculum">Curriculum</a>
-        <a href="#faq">FAQ</a>
+        <a href="#register">Register</a>
       </div>
-      <a href="#apply" class="nav__cta">Apply <span class="arrow">→</span></a>
+      <a href="#register" class="nav__cta">Register <span class="arrow">→</span></a>
     </div>
   </div>
 </nav>
@@ -1094,6 +1114,9 @@
         <div class="pillar__tag">✦ Demo Day</div>
       </article>
     </div>
+    <div class="section__cta reveal">
+      <a href="#register" class="btn btn--white btn--lg">Get the full curriculum <span class="arrow">→</span></a>
+    </div>
   </div>
 </section>
 
@@ -1127,6 +1150,9 @@
         <div class="phase__h">Scale or pivot</div>
         <div class="phase__desc">Read your P&amp;L · growth channels · Demo Day · 90-day post-program plan</div>
       </div>
+    </div>
+    <div class="section__cta reveal">
+      <a href="#register" class="btn btn--white btn--lg">Save my spot <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -1184,6 +1210,9 @@
         </div>
       </div>
     </div>
+    <div class="section__cta reveal">
+      <a href="#register" class="btn btn--purple btn--lg">I want in <span class="arrow">→</span></a>
+    </div>
   </div>
 </section>
 
@@ -1236,43 +1265,32 @@
         </div>
       </div>
     </div>
+    <div class="section__cta reveal" style="margin-top:48px">
+      <a href="#register" class="btn btn--white btn--lg">Tell me more <span class="arrow">→</span></a>
+    </div>
   </div>
 </section>
 
-<!-- ============== FAQ ============== -->
-<section class="section" id="faq">
+<!-- ============== REGISTER (replaced FAQ) ============== -->
+<section class="section section--cream" id="register">
   <div class="container">
-    <div class="section__head reveal">
-      <span class="blob blob--green"><span>FAQ</span></span>
-      <h2 class="h2" style="color:var(--ink-dark);margin-top:24px">Things parents and students ask first.</h2>
+    <div class="section__head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
+      <span class="blob blob--purple"><span>REGISTER</span></span>
+      <h2 class="h2" style="color:var(--ink-dark);margin-top:24px">Get notified when Cohort 1 opens.</h2>
+      <p class="lead lead--dark">We'll send the curriculum, pricing, and timing — plus a 15-min call with Astro to talk about what you'd build.</p>
     </div>
 
-    <div class="faq__list" style="border-color:var(--border-cream)">
-      <details class="faq__item" style="border-color:var(--border-cream)" open>
-        <summary class="faq__q" style="color:var(--ink-dark)">Does my child need to know how to code?<span></span></summary>
-        <div class="faq__a" style="color:#444">No. Cohort 1 is designed for absolute beginners. We teach the AI-native stack — Cursor, Claude, n8n — which compresses months of syntax into weeks of shipping.</div>
-      </details>
-      <details class="faq__item" style="border-color:var(--border-cream)">
-        <summary class="faq__q" style="color:var(--ink-dark)">What language is the cohort taught in?<span></span></summary>
-        <div class="faq__a" style="color:#444">Bilingual Vietnamese / English. Astro switches based on the room. All written materials are available in both languages.</div>
-      </details>
-      <details class="faq__item" style="border-color:var(--border-cream)">
-        <summary class="faq__q" style="color:var(--ink-dark)">Online or in-person?<span></span></summary>
-        <div class="faq__a" style="color:#444">Live online for everyone. Optional in-person studio sessions in HCMC (District 2) and Hanoi (Tay Ho) for cohort members based locally.</div>
-      </details>
-      <details class="faq__item" style="border-color:var(--border-cream)">
-        <summary class="faq__q" style="color:var(--ink-dark)">How much time does my kid need to commit?<span></span></summary>
-        <div class="faq__a" style="color:#444">Two live sessions per week (90 min each), plus 4–6 hours of building. We expect this to feel like a serious extracurricular — not a school subject.</div>
-      </details>
-      <details class="faq__item" style="border-color:var(--border-cream)">
-        <summary class="faq__q" style="color:var(--ink-dark)">Can parents see progress?<span></span></summary>
-        <div class="faq__a" style="color:#444">Yes — every parent gets a weekly dashboard with code shipped, customer interviews logged, and revenue (when applicable). No mystery.</div>
-      </details>
-      <details class="faq__item" style="border-color:var(--border-cream)">
-        <summary class="faq__q" style="color:var(--ink-dark)">What's the refund policy?<span></span></summary>
-        <div class="faq__a" style="color:#444">Full refund within the first two weeks of your first cohort, no questions asked. After that, you can cancel future cohorts but the current one is final.</div>
-      </details>
-    </div>
+    <form class="register-form register-form--full reveal" id="fullRegisterForm" novalidate>
+      <div class="row">
+        <input type="text" name="name" placeholder="Your name" aria-label="Your name" required class="register-input">
+        <input type="email" name="email" placeholder="Your email" aria-label="Your email" required class="register-input">
+      </div>
+      <input type="number" name="age" placeholder="Your age" aria-label="Your age" min="10" max="80" required class="register-input">
+      <textarea name="goals" placeholder="What do you want to build or learn at Codepet Academy?" aria-label="Learning goals" rows="4" required class="register-input register-textarea"></textarea>
+      <button type="submit" class="register-btn" id="fullRegisterBtn">Tell me more</button>
+      <p class="register-helper">Curriculum, pricing &amp; a 15-min call with Astro.</p>
+      <p id="fullRegisterStatus" class="register-status" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </section>
 
@@ -1283,8 +1301,8 @@
     <h2 class="display display--xl" style="margin-top:24px">Cohort 1 starts<br>June 17, 2026.</h2>
     <p class="lead">12 seats remaining. Founder-led. One product shipped. Either you go in, or you keep reading articles like this one.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-      <a href="#" class="btn btn--white btn--lg">Apply for next cohort <span class="arrow">→</span></a>
-      <a href="#" class="btn btn--black btn--lg">Talk to Astro first</a>
+      <a href="#register" class="btn btn--white btn--lg">Get notified <span class="arrow">→</span></a>
+      <a href="#register" class="btn btn--black btn--lg">Talk to Astro first</a>
     </div>
   </div>
 </section>
@@ -1297,7 +1315,7 @@
       <div class="footer__links">
         <a href="#program">Program</a>
         <a href="#curriculum">Curriculum</a>
-        <a href="#faq">FAQ</a>
+        <a href="#register">Register</a>
         <a href="mailto:hello@codepet.academy">Contact</a>
       </div>
       <div class="footer__legal">VN · EN · OUTCAST © 2026</div>
@@ -1364,6 +1382,60 @@
       if (!formData.name || !formData.email) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Please fill in both fields.';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'That email looks off — please check it.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      statusEl.dataset.state = '';
+      statusEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Submission failed.');
+
+        btn.textContent = 'Got it ✓';
+        statusEl.dataset.state = 'success';
+        statusEl.textContent = "Thanks — we'll be in touch about Cohort 1.";
+        form.reset();
+        setTimeout(() => {
+          btn.textContent = originalBtnText;
+          btn.disabled = false;
+        }, 4000);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = originalBtnText;
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = err.message || 'Something went wrong. Try again?';
+      }
+    });
+  })();
+
+  // Full registration form (in #register section) — same backend, more fields
+  (function(){
+    const form = document.getElementById('fullRegisterForm');
+    if (!form) return;
+    const btn = document.getElementById('fullRegisterBtn');
+    const statusEl = document.getElementById('fullRegisterStatus');
+    const originalBtnText = btn.textContent;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(form));
+
+      if (!formData.name || !formData.email || !formData.age || !formData.goals) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'Please fill in all four fields.';
         return;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
