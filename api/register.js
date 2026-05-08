@@ -70,10 +70,34 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: error.message || 'Email delivery failed.' });
     }
 
+    // Log to Google Sheet (non-fatal — registration succeeds even if sheet write fails)
+    logToSheet({
+      name,
+      email,
+      source: req.headers['referer'] || 'codepet-academy',
+      userAgent: req.headers['user-agent'] || ''
+    }).catch((e) => console.error('Sheet logging failed (non-fatal):', e));
+
     return res.status(200).json({ success: true, id: data?.id });
   } catch (err) {
     console.error('Unhandled error:', err);
     return res.status(500).json({ error: 'Server error. Please try again.' });
+  }
+}
+
+async function logToSheet({ name, email, source, userAgent }) {
+  const url = process.env.SHEET_WEBHOOK_URL;
+  const secret = process.env.SHEET_WEBHOOK_SECRET;
+  if (!url || !secret) return; // skip if not configured
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ secret, name, email, source, userAgent }),
+    redirect: 'follow'
+  });
+  if (!response.ok) {
+    throw new Error(`Sheet webhook returned ${response.status}`);
   }
 }
 
