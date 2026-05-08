@@ -445,6 +445,10 @@
   }
   .register-status[data-state="success"]{color:var(--green)}
   .register-status[data-state="error"]{color:var(--red)}
+  .register-helper{
+    margin:-2px 0 0;font-size:13px;color:var(--muted);
+    font-family:'Open Sans',sans-serif;text-align:center;
+  }
 
   /* Pixel pet decoration */
   .hero__pet{
@@ -986,10 +990,6 @@
 
 <!-- ============== HERO ============== -->
 <header class="hero container" style="position:relative;text-align:center">
-  <div class="hero__meta" style="justify-content:center">
-    <span class="chip">◉ COHORT 1 · STARTS JUNE 17, 2026</span>
-    <span class="chip">SEATS 12 / 24</span>
-  </div>
   <h1 class="display display--xxl hero__title">
     <span class="word">Ship</span> <span class="word">a</span> <span class="word">real</span> <span class="word">product.</span><br>
     <span class="word">Taught</span> <span class="word">by</span> <span class="word">an</span> <span class="word accent">AI&nbsp;pet</span><br>
@@ -1005,7 +1005,8 @@
       <input type="text" name="name" placeholder="Your name" aria-label="Your name" required class="register-input">
       <input type="email" name="email" placeholder="Your email" aria-label="Your email" required class="register-input">
     </div>
-    <button type="submit" class="register-btn" id="registerBtn">Sign me up</button>
+    <button type="submit" class="register-btn" id="registerBtn">Tell me more</button>
+    <p class="register-helper">Curriculum, pricing &amp; a 15-min call with Astro.</p>
     <p id="registerStatus" class="register-status" role="status" aria-live="polite"></p>
   </form>
 
