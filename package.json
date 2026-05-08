@@ -3,8 +3,5 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Codepet Academy — landing page for the 12-week cohort",
-  "dependencies": {
-    "resend": "^4.0.1"
-  }
+  "description": "Codepet Academy — landing page for the 12-week cohort"
 }
