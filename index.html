@@ -863,10 +863,10 @@
     z-index: 1;
   }
 
-  /* Organic bubble section label — tilted, rounded blob shape */
+  /* Pixel-art bubble label — stepped oval, tilted */
   .blob {
     display: inline-block;
-    padding: 22px 38px 26px;
+    padding: 28px 56px 32px;
     color: #fff;
     font-family: 'Upheaval TT','Press Start 2P',monospace;
     font-size: 20px;
@@ -874,12 +874,21 @@
     text-transform: uppercase;
     line-height: 1;
     background: var(--blob-c, var(--orange));
-    /* Soft asymmetric bubble corners */
-    border-radius: 60% 40% 65% 35% / 50% 60% 40% 50%;
-    /* Tilt for playful character */
+    /* Pixel-stepped oval silhouette — chunky 8-bit ellipse */
+    clip-path: polygon(
+      18% 0, 82% 0,
+      88% 8%, 94% 8%,
+      94% 16%, 100% 16%,
+      100% 84%, 94% 84%,
+      94% 92%, 88% 92%,
+      82% 100%, 18% 100%,
+      12% 92%, 6% 92%,
+      6% 84%, 0 84%,
+      0 16%, 6% 16%,
+      6% 8%, 12% 8%
+    );
     transform: rotate(-12deg);
     transform-origin: center;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.10);
   }
   .blob > span { display: inline-block; }
   .blob::before, .blob::after { display: none; }
@@ -1055,9 +1064,8 @@
     <span class="word">that builds with you.</span>
   </h1>
   <p class="hero__sub reveal" style="margin-left:auto;margin-right:auto">
-    A 12-week founder-led cohort for anyone 12 and up. Built with Cursor, Claude, and an AI
-    companion that ships beside you — we train the founder, not the employee, so you walk out
-    with a real product real customers will pay for.
+    Twelve weeks. One real product. Real customers paying real money for it.
+    For anyone twelve and up who wants to be a founder, not an employee.
   </p>
   <div class="hero__cta reveal">
     <a href="#register" class="btn btn--primary btn--lg">Tell me more</a>
@@ -1158,30 +1166,30 @@
   <div class="container">
     <div class="section__head reveal">
       <span class="blob blob--blue"><span>CURRICULUM</span></span>
-      <h2 class="h2" style="margin-top:24px">From idea to launched product, week by week.</h2>
-      <p class="lead">A live 12-week cohort. Astro coaches the room. Your Codepet ships beside you between sessions.</p>
+      <h2 class="h2" style="margin-top:24px">From zero to launched product in twelve weeks</h2>
+      <p class="lead">Twelve weeks live with Astro. Your Codepet builds beside you between every session.</p>
     </div>
 
     <div class="timeline reveal-stagger">
       <div class="phase phase--1">
-        <div class="phase__wk">WEEKS 1–3</div>
+        <div class="phase__wk">WEEKS 1 to 3</div>
         <div class="phase__h">Mindset &amp; idea</div>
-        <div class="phase__desc">Operator thinking · 10 product tear-downs · pick your wedge · 20 customer interviews</div>
+        <div class="phase__desc">Think like an operator. Tear apart ten products. Pick one painful wedge nobody else wants. Run twenty real customer conversations before you write a line of code.</div>
       </div>
       <div class="phase phase--2">
-        <div class="phase__wk">WEEKS 4–6</div>
+        <div class="phase__wk">WEEKS 4 to 6</div>
         <div class="phase__h">Build the agent</div>
-        <div class="phase__desc">Cursor + Claude + n8n · architect &amp; ship V1 · APIs, payments, databases · weekly review</div>
+        <div class="phase__desc">Cursor, Claude, n8n. You architect, build, and ship V1 end to end. Astro reviews your code every week. Real APIs, real payments, real database.</div>
       </div>
       <div class="phase phase--3">
-        <div class="phase__wk">WEEKS 7–9</div>
+        <div class="phase__wk">WEEKS 7 to 9</div>
         <div class="phase__h">Launch as a startup</div>
-        <div class="phase__desc">Pricing &amp; payments · legal &amp; brand · launch day · first 10 paying customers · talk to all of them</div>
+        <div class="phase__desc">Pricing, payments, legal, brand. Launch day. Your first ten paying customers. You talk to every single one of them in week one.</div>
       </div>
       <div class="phase phase--4">
-        <div class="phase__wk">WEEKS 10–12</div>
+        <div class="phase__wk">WEEKS 10 to 12</div>
         <div class="phase__h">Scale or pivot</div>
-        <div class="phase__desc">Read your P&amp;L · growth channels · Demo Day · 90-day post-program plan</div>
+        <div class="phase__desc">Open your P&amp;L like a real founder. Pick growth channels that work. Demo Day. Walk out with a ninety day plan to keep going.</div>
       </div>
     </div>
     <div class="section__cta reveal">
@@ -1204,42 +1212,42 @@
         <p class="quote__text">"My daughter shipped a study-buddy agent that 40 of her classmates pay for. Her university essay basically writes itself now."</p>
         <div class="quote__by">
           <div class="avatar a1">AN</div>
-          <div><div class="quote__name">Anh Nguyễn</div><div class="quote__role">Parent · Teen Founder track</div></div>
+          <div><div class="quote__name">Anh Nguyễn</div><div class="quote__role">Parent of Cohort 1 student</div></div>
         </div>
       </div>
       <div class="quote">
         <p class="quote__text">"I came in not knowing what an API was. Twelve weeks later I had paying users and a real Stripe dashboard. That's the part nobody else teaches."</p>
         <div class="quote__by">
           <div class="avatar a2">MD</div>
-          <div><div class="quote__name">Minh Đặng</div><div class="quote__role">Young Operator · 24</div></div>
+          <div><div class="quote__name">Minh Đặng</div><div class="quote__role">Cohort 1 student, age 24</div></div>
         </div>
       </div>
       <div class="quote">
         <p class="quote__text">"Astro doesn't lecture. He builds with you. By week six my son was reviewing his own pull requests and pushing to production."</p>
         <div class="quote__by">
           <div class="avatar a3">LT</div>
-          <div><div class="quote__name">Linh Trần</div><div class="quote__role">Parent · Junior Maker</div></div>
+          <div><div class="quote__name">Linh Trần</div><div class="quote__role">Parent in HCMC</div></div>
         </div>
       </div>
       <div class="quote">
         <p class="quote__text">"The Codepet feels like a co-founder. It catches what I miss, ships when I sleep, and pushes back when I'm being lazy."</p>
         <div class="quote__by">
           <div class="avatar a4">HP</div>
-          <div><div class="quote__name">Hà Phạm</div><div class="quote__role">Teen Founder · 17</div></div>
+          <div><div class="quote__name">Hà Phạm</div><div class="quote__role">Cohort 1 student, age 17</div></div>
         </div>
       </div>
       <div class="quote">
         <p class="quote__text">"My son went from making me Roblox avatars to running a real P&amp;L. He still asks for screen time but now it's because he's checking churn."</p>
         <div class="quote__by">
           <div class="avatar a5">DV</div>
-          <div><div class="quote__name">Diệu Vũ</div><div class="quote__role">Parent · Junior Maker</div></div>
+          <div><div class="quote__name">Diệu Vũ</div><div class="quote__role">Parent in Hanoi</div></div>
         </div>
       </div>
       <div class="quote">
         <p class="quote__text">"Best money I've ever spent on a course. I quit my Big-4 job in week 9 and I haven't looked back. The cohort is the moat."</p>
         <div class="quote__by">
           <div class="avatar a6">TL</div>
-          <div><div class="quote__name">Tâm Lê</div><div class="quote__role">Young Operator · Cohort 1</div></div>
+          <div><div class="quote__name">Tâm Lê</div><div class="quote__role">Cohort 1 founder</div></div>
         </div>
       </div>
     </div>
