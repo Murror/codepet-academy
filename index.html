@@ -66,12 +66,12 @@
   .display{
     font-family:'Upheaval TT','Press Start 2P',monospace;
     font-weight:400;
-    line-height:1.05;
+    line-height:0.95;
     letter-spacing:0.02em;
     -webkit-font-smoothing:antialiased;
     text-rendering:geometricPrecision;
   }
-  .display--xxl{font-size:clamp(36px,5.6vw,72px);text-transform:uppercase}
+  .display--xxl{font-size:clamp(44px,7.2vw,92px);text-transform:uppercase}
   .display--xl{font-size:clamp(28px,5vw,56px);text-transform:uppercase}
   .display--l{font-size:clamp(24px,3.5vw,44px);text-transform:uppercase}
   .h2{
@@ -361,6 +361,8 @@
   .hero__sub{max-width:60ch;font-size:clamp(15px,1.3vw,18px);color:var(--muted);margin-bottom:28px}
   .hero__ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .hero__ctas .meta{font-size:13px;color:var(--muted);font-family:'Upheaval TT','Press Start 2P',monospace;letter-spacing:0.06em;margin-left:6px;text-transform:uppercase}
+  /* Hero CTA — single button replacing the form */
+  .hero__cta{display:flex;justify-content:center;margin-top:8px}
 
   /* === Pixel-pill registration form === */
   .register-form{
@@ -1043,15 +1045,9 @@
     that ships beside you — not a syllabus, not a certificate, a launched product real customers
     will pay for.
   </p>
-  <form class="register-form reveal" id="registerForm" novalidate>
-    <div class="row">
-      <input type="text" name="name" placeholder="Your name" aria-label="Your name" required class="register-input">
-      <input type="email" name="email" placeholder="Your email" aria-label="Your email" required class="register-input">
-    </div>
-    <button type="submit" class="register-btn" id="registerBtn">Tell me more</button>
-    <p class="register-helper">Curriculum, pricing &amp; a 15-min call with Astro.</p>
-    <p id="registerStatus" class="register-status" role="status" aria-live="polite"></p>
-  </form>
+  <div class="hero__cta reveal">
+    <a href="#register" class="btn btn--primary btn--lg">Tell me more</a>
+  </div>
 
   <!-- Decorative floating stars (visible on white hero) -->
   <div class="deco-star" style="right:240px;top:180px;color:var(--red)" aria-hidden="true">
