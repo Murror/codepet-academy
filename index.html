@@ -1294,8 +1294,7 @@
   <div class="container">
     <div class="section__head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
       <span class="blob blob--purple"><span>REGISTER</span></span>
-      <h2 class="h2" style="color:var(--ink-dark);margin-top:24px">Get notified when Cohort 1 opens.</h2>
-      <p class="lead lead--dark">We'll send the curriculum, pricing, and timing — plus a 15-min call with Astro to talk about what you'd build.</p>
+      <h2 class="h2" style="color:var(--ink-dark);margin-top:24px">Get the latest updates on the course</h2>
     </div>
 
     <form class="register-form register-form--full reveal" id="fullRegisterForm" novalidate>
@@ -1303,16 +1302,13 @@
         <input type="text" name="name" placeholder="Your name" aria-label="Your name" required class="register-input">
         <input type="email" name="email" placeholder="Your email" aria-label="Your email" required class="register-input">
       </div>
-      <div class="row">
-        <input type="number" name="age" placeholder="Your age" aria-label="Your age" min="10" max="80" required class="register-input">
-        <select name="track" aria-label="Which track" required class="register-input register-select">
-          <option value="" disabled selected>Pick your track</option>
-          <option value="junior">Junior Maker · 12–15</option>
-          <option value="teen">Teen Founder · 16–19</option>
-          <option value="operator">Young Operator · 20–30</option>
-          <option value="undecided">Not sure yet</option>
-        </select>
-      </div>
+      <select name="track" aria-label="Which track" required class="register-input register-select">
+        <option value="" disabled selected>Pick your track</option>
+        <option value="junior">Junior Maker · 12–15</option>
+        <option value="teen">Teen Founder · 16–19</option>
+        <option value="operator">Young Operator · 20–30</option>
+        <option value="undecided">Not sure yet</option>
+      </select>
       <select name="experience" aria-label="Coding experience" required class="register-input register-select">
         <option value="" disabled selected>Coding experience</option>
         <option value="none">None — total beginner</option>
@@ -1322,7 +1318,6 @@
       </select>
       <textarea name="goals" placeholder="What do you want to build or learn at Codepet Academy?" aria-label="Learning goals" rows="4" required class="register-input register-textarea"></textarea>
       <button type="submit" class="register-btn" id="fullRegisterBtn">Tell me more</button>
-      <p class="register-helper">Curriculum, pricing &amp; a 15-min call with Astro.</p>
       <p id="fullRegisterStatus" class="register-status" role="status" aria-live="polite"></p>
     </form>
   </div>
@@ -1467,7 +1462,7 @@
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form));
 
-      if (!formData.name || !formData.email || !formData.age || !formData.track || !formData.experience || !formData.goals) {
+      if (!formData.name || !formData.email || !formData.track || !formData.experience || !formData.goals) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Please fill in all fields.';
         return;
