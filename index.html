@@ -724,9 +724,30 @@
   .faq__a{margin-top:14px;color:var(--muted);max-width:70ch;font-size:15px;line-height:1.6}
 
   /* ---------- Final CTA ---------- */
-  .final-cta{padding:120px 0;text-align:center}
+  .final-cta{padding:160px 0;text-align:center}
   .final-cta .display{margin-bottom:24px}
   .final-cta .lead{margin:0 auto 36px;color:rgba(255,255,255,0.85)}
+  /* Single-quote callout */
+  .final-quote{max-width:900px;margin:0 auto;padding:0 24px}
+  .final-quote__mark{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:clamp(72px,12vw,160px);
+    line-height:0.6;
+    color:#fff;
+    margin:0 0 12px;
+    opacity:0.9;
+  }
+  .final-quote__text{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:clamp(28px,4vw,52px);
+    line-height:1.15;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    color:#fff;
+    margin:0;
+    font-style:normal;
+  }
+  @media(max-width:760px){.final-cta{padding:96px 0}}
 
   /* ---------- Footer ---------- */
   footer{padding:60px 0 36px;background:#1a1a1a;color:#FCFAED}
@@ -842,10 +863,10 @@
     z-index: 1;
   }
 
-  /* Pixel-art section label — stepped octagon shape */
+  /* Organic bubble section label — tilted, rounded blob shape */
   .blob {
     display: inline-block;
-    padding: 22px 36px;
+    padding: 22px 38px 26px;
     color: #fff;
     font-family: 'Upheaval TT','Press Start 2P',monospace;
     font-size: 20px;
@@ -853,19 +874,12 @@
     text-transform: uppercase;
     line-height: 1;
     background: var(--blob-c, var(--orange));
-    /* Stepped pixel-art corners — looks like chunky 8-bit corners */
-    clip-path: polygon(
-      12px 0, calc(100% - 12px) 0,
-      calc(100% - 12px) 6px, calc(100% - 6px) 6px,
-      calc(100% - 6px) 12px, 100% 12px,
-      100% calc(100% - 12px), calc(100% - 6px) calc(100% - 12px),
-      calc(100% - 6px) calc(100% - 6px), calc(100% - 12px) calc(100% - 6px),
-      calc(100% - 12px) 100%, 12px 100%,
-      12px calc(100% - 6px), 6px calc(100% - 6px),
-      6px calc(100% - 12px), 0 calc(100% - 12px),
-      0 12px, 6px 12px,
-      6px 6px, 12px 6px
-    );
+    /* Soft asymmetric bubble corners */
+    border-radius: 60% 40% 65% 35% / 50% 60% 40% 50%;
+    /* Tilt for playful character */
+    transform: rotate(-12deg);
+    transform-origin: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.10);
   }
   .blob > span { display: inline-block; }
   .blob::before, .blob::after { display: none; }
@@ -1041,9 +1055,9 @@
     <span class="word">that builds with you.</span>
   </h1>
   <p class="hero__sub reveal" style="margin-left:auto;margin-right:auto">
-    A 12-week founder-led cohort for ages 12 to 30. Built with Cursor, Claude, and an AI companion
-    that ships beside you — not a syllabus, not a certificate, a launched product real customers
-    will pay for.
+    A 12-week founder-led cohort for anyone 12 and up. Built with Cursor, Claude, and an AI
+    companion that ships beside you — we train the founder, not the employee, so you walk out
+    with a real product real customers will pay for.
   </p>
   <div class="hero__cta reveal">
     <a href="#register" class="btn btn--primary btn--lg">Tell me more</a>
@@ -1323,16 +1337,13 @@
   </div>
 </section>
 
-<!-- ============== FINAL CTA ============== -->
+<!-- ============== FINAL CTA — single quote ============== -->
 <section class="section section--red final-cta" id="apply">
-  <div class="container reveal">
-    <span class="blob blob--yellow"><span>APPLY</span></span>
-    <h2 class="display display--xl" style="margin-top:24px">Cohort 1 starts<br>June 17, 2026.</h2>
-    <p class="lead">12 seats remaining. Founder-led. One product shipped. Either you go in, or you keep reading articles like this one.</p>
-    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-      <a href="#register" class="btn btn--white btn--lg">Get notified</a>
-      <a href="#register" class="btn btn--black btn--lg">Talk to Astro first</a>
-    </div>
+  <div class="container reveal final-quote">
+    <p class="final-quote__mark" aria-hidden="true">&ldquo;</p>
+    <blockquote class="final-quote__text">
+      The next great founder will be born the moment they're invested in early.
+    </blockquote>
   </div>
 </section>
 
