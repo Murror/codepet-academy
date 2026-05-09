@@ -755,8 +755,23 @@
   .footer__links{display:flex;gap:24px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,0.6)}
   .footer__links a:hover{color:#fff}
   .footer__legal{font-size:12px;color:rgba(255,255,255,0.6);font-family:'Upheaval TT','Press Start 2P',monospace;letter-spacing:0.08em;text-transform:uppercase}
-  footer .brand,footer .nav__brand-academy{color:#FCFAED}
-  footer .brand__dot{background:var(--purple)}
+  footer .brand{
+    display:inline-flex;align-items:center;gap:10px;
+    line-height:1;text-decoration:none;
+  }
+  .footer__brand-img{
+    height:32px;width:auto;
+    image-rendering:pixelated;
+    image-rendering:-moz-crisp-edges;
+    image-rendering:crisp-edges;
+  }
+  .footer__brand-academy{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    font-size:13px;
+    color:var(--yellow);
+    letter-spacing:0.14em;
+    padding-top:5px;
+  }
 
   /* ---------- Pixel pet (SVG-style with divs) ---------- */
   .pet{display:grid;grid-template-columns:repeat(8,12px);grid-template-rows:repeat(8,12px);gap:0}
@@ -1355,7 +1370,10 @@
 <footer>
   <div class="container">
     <div class="footer__row">
-      <a href="#" class="brand"><span class="brand__dot"></span> Codepet Academy</a>
+      <a href="#" class="brand" aria-label="Codepet Academy">
+        <img src="codepet-wordmark.png" alt="Codepet" class="footer__brand-img">
+        <span class="footer__brand-academy">ACADEMY</span>
+      </a>
       <div class="footer__links">
         <a href="#program">Program</a>
         <a href="#curriculum">Curriculum</a>
