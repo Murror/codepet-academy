@@ -1326,13 +1326,7 @@
         <input type="text" name="name" placeholder="Your name" aria-label="Your name" required class="register-input">
         <input type="email" name="email" placeholder="Your email" aria-label="Your email" required class="register-input">
       </div>
-      <select name="track" aria-label="Which track" required class="register-input register-select">
-        <option value="" disabled selected>Pick your track</option>
-        <option value="junior">Junior Maker · 12–15</option>
-        <option value="teen">Teen Founder · 16–19</option>
-        <option value="operator">Young Operator · 20–30</option>
-        <option value="undecided">Not sure yet</option>
-      </select>
+      <input type="number" name="age" placeholder="Your age" aria-label="Your age" min="10" max="80" required class="register-input">
       <select name="experience" aria-label="Coding experience" required class="register-input register-select">
         <option value="" disabled selected>Coding experience</option>
         <option value="none">None — total beginner</option>
@@ -1483,7 +1477,7 @@
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form));
 
-      if (!formData.name || !formData.email || !formData.track || !formData.experience || !formData.goals) {
+      if (!formData.name || !formData.email || !formData.age || !formData.experience || !formData.goals) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Please fill in all fields.';
         return;
