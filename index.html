@@ -773,19 +773,19 @@
     width:100%;
   }
   .footer__pixel-strip > span{ flex:1 }
-  .footer__pixel-strip > span:nth-child(1){ background: var(--red) }
-  .footer__pixel-strip > span:nth-child(2){ background: var(--orange) }
-  .footer__pixel-strip > span:nth-child(3){ background: var(--yellow) }
-  .footer__pixel-strip > span:nth-child(4){ background: var(--green) }
-  .footer__pixel-strip > span:nth-child(5){ background: var(--pink) }
-  .footer__pixel-strip > span:nth-child(6){ background: var(--purple) }
+  .footer__pixel-strip > span:nth-child(1){ background: var(--orange) }
+  .footer__pixel-strip > span:nth-child(2){ background: var(--yellow) }
+  .footer__pixel-strip > span:nth-child(3){ background: var(--green) }
+  .footer__pixel-strip > span:nth-child(4){ background: var(--pink) }
+  .footer__pixel-strip > span:nth-child(5){ background: var(--purple) }
 
   .footer__top{
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr 230px;
+    grid-template-columns: 1fr 1fr;
     gap: 36px 56px;
     align-items:start;
     padding: 64px 0 48px;
+    max-width: 640px;
   }
 
   .footer__col-heading{
@@ -1516,7 +1516,7 @@
 <!-- ============== FOOTER ============== -->
 <footer class="footer">
   <div class="footer__pixel-strip" aria-hidden="true">
-    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
   </div>
 
   <div class="container">
@@ -1535,26 +1535,8 @@
         <ul class="footer__list">
           <li><a href="#register">Register</a></li>
           <li><a href="#apply">Apply</a></li>
-          <li><a href="mailto:hello@codepet.academy">Email Astro</a></li>
         </ul>
       </div>
-      <div>
-        <h4 class="footer__col-heading">Find Us</h4>
-        <ul class="footer__list">
-          <li>Saigon · Hanoi</li>
-          <li>Vietnam</li>
-          <li><a href="mailto:hello@codepet.academy">hello@codepet.academy</a></li>
-        </ul>
-      </div>
-      <div class="footer__badge">
-        <strong>Cohort 1</strong>
-        Built for kids who'd rather ship than wait
-      </div>
-    </div>
-
-    <div class="footer__ctas">
-      <a href="#register" class="footer__pill footer__pill--yellow">LET'S TALK →</a>
-      <a href="mailto:hello@codepet.academy" class="footer__pill footer__pill--orange">HELLO@CODEPET.ACADEMY</a>
     </div>
   </div>
 
