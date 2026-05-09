@@ -1428,10 +1428,8 @@
     }
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          io.unobserve(entry.target);
-        }
+        // Toggle so the animation re-fires when scrolling up AND down
+        entry.target.classList.toggle('in', entry.isIntersecting);
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
     targets.forEach(t => io.observe(t));
