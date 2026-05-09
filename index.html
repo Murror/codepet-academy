@@ -1349,6 +1349,15 @@
         <option value="comfortable">Comfortable — I've shipped small projects</option>
         <option value="advanced">Advanced — I code regularly</option>
       </select>
+      <select name="referral" aria-label="How did you hear about us?" required class="register-input register-select">
+        <option value="" disabled selected>How did you hear about us?</option>
+        <option value="friend">Friend or family</option>
+        <option value="social">Social media (Instagram, TikTok, etc.)</option>
+        <option value="search">Google or search</option>
+        <option value="article">News article or blog</option>
+        <option value="event">Event or workshop</option>
+        <option value="other">Other</option>
+      </select>
       <textarea name="goals" placeholder="What do you want to build or learn at Codepet Academy?" aria-label="Learning goals" rows="4" required class="register-input register-textarea"></textarea>
       <button type="submit" class="register-btn" id="fullRegisterBtn">Tell me more</button>
       <p id="fullRegisterStatus" class="register-status" role="status" aria-live="polite"></p>
@@ -1495,7 +1504,7 @@
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form));
 
-      if (!formData.name || !formData.email || !formData.age || !formData.experience || !formData.goals) {
+      if (!formData.name || !formData.email || !formData.age || !formData.experience || !formData.referral || !formData.goals) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Please fill in all fields.';
         return;

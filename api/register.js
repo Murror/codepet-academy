@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, age, experience, goals } = req.body || {};
+  const { name, email, age, experience, referral, goals } = req.body || {};
 
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required.' });
@@ -28,9 +28,8 @@ export default async function handler(req, res) {
       email,
       age: age || '',
       experience: experience || '',
-      goals: goals || '',
-      source: req.headers['referer'] || 'codepet-academy',
-      userAgent: req.headers['user-agent'] || ''
+      referral: referral || '',
+      goals: goals || ''
     });
 
     return res.status(200).json({ success: true });
@@ -40,7 +39,7 @@ export default async function handler(req, res) {
   }
 }
 
-async function logToSheet({ name, email, age, experience, goals, source, userAgent }) {
+async function logToSheet({ name, email, age, experience, referral, goals }) {
   const url = process.env.SHEET_WEBHOOK_URL;
   const secret = process.env.SHEET_WEBHOOK_SECRET;
   if (!url || !secret) {
@@ -50,7 +49,7 @@ async function logToSheet({ name, email, age, experience, goals, source, userAge
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ secret, name, email, age, experience, goals, source, userAgent }),
+    body: JSON.stringify({ secret, name, email, age, experience, referral, goals }),
     redirect: 'follow'
   });
   if (!response.ok) {
