@@ -48,7 +48,15 @@
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  /* Lenis smooth-scroll — required CSS hooks. Native smooth-scroll is disabled
+     while Lenis is active so the two engines don't fight each other. */
+  html.lenis,html.lenis body{height:auto}
+  .lenis.lenis-smooth{scroll-behavior:auto !important}
+  .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+  .lenis.lenis-stopped{overflow:hidden}
+  .lenis.lenis-smooth iframe{pointer-events:none}
+  /* Fallback for users who haven't loaded Lenis yet (or have JS disabled) */
+  html:not(.lenis){scroll-behavior:smooth}
   body{
     background:var(--bg);
     color:var(--ink);
@@ -1176,6 +1184,8 @@
     .deco-star, .hero__pet { animation: none !important; }
   }
 </style>
+<!-- Lenis smooth-scroll (Poch.studio-style inertia) -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.10/dist/lenis.min.js" defer></script>
 </head>
 <body>
 
@@ -1562,6 +1572,41 @@
 </footer>
 
 <script>
+  // Lenis smooth-scroll — Poch.studio-style inertia.
+  // Skipped entirely if the user prefers reduced motion or Lenis failed to load.
+  (function(){
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion || typeof Lenis === 'undefined') return;
+
+    const lenis = new Lenis({
+      duration: 1.05,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      // Mobile keeps native scroll — feels faster and avoids momentum jank
+      smoothTouch: false,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+    });
+
+    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    // Route in-page anchor clicks through Lenis so they ease in instead of jumping
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { offset: -80 }); // leave room for sticky nav
+    });
+
+    // Expose for debugging / future scroll-driven effects
+    window.__lenis = lenis;
+  })();
+
   // Hide-on-scroll-down, show-on-scroll-up navbar — same pattern as Zeentra
   (function(){
     const nav = document.querySelector('.nav');
