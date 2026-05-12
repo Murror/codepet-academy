@@ -1339,6 +1339,47 @@
 </style>
 <!-- Lenis smooth-scroll (Poch.studio-style inertia) -->
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.10/dist/lenis.min.js" defer></script>
+
+<!-- ============== FIREBASE ANALYTICS ==============
+     Paste your project's firebaseConfig in the placeholder below.
+     Get it from: Firebase Console → Project settings → Your apps → SDK setup. -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAnalytics, logEvent, setUserProperties } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+
+  // === REPLACE THE VALUES BELOW WITH YOUR FIREBASE CONFIG ===
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID",
+    measurementId: "G-XXXXXXXXXX"
+  };
+
+  // Skip init if the config still has placeholder values (so dev/preview doesn't error).
+  const looksLikePlaceholder = firebaseConfig.apiKey.startsWith('YOUR_');
+
+  if (!looksLikePlaceholder) {
+    try {
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      // Segment EN vs VI traffic in Analytics reports
+      setUserProperties(analytics, { page_language: 'en' });
+
+      // Global helper used by the inline script below for custom events.
+      window.coTrack = (name, params) => {
+        try { logEvent(analytics, name, params || {}); } catch (_) { /* never break the page over analytics */ }
+      };
+    } catch (err) {
+      console.warn('[Firebase] init failed', err);
+      window.coTrack = () => {};
+    }
+  } else {
+    window.coTrack = () => {}; // no-op until config is filled in
+  }
+</script>
 </head>
 <body>
 
@@ -1346,7 +1387,7 @@
 <nav class="nav" aria-label="Primary">
   <div class="nav__inner">
     <div class="nav__pill">
-      <a href="#" class="nav__brand" aria-label="Codepet Academy">
+      <a href="https://code-pet.com/" class="nav__brand" aria-label="Codepet Academy">
         <img src="codepet-wordmark.png" alt="Codepet" class="nav__brand-img">
         <span class="nav__brand-academy">ACADEMY</span>
       </a>
