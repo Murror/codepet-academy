@@ -1927,15 +1927,18 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form));
+      window.coTrack && window.coTrack('register_submit_attempt');
 
       if (!formData.name || !formData.email || !formData.age || !formData.experience || !formData.referral || !formData.goals) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Please fill in all fields.';
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_field' });
         return;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'That email looks off — please check it.';
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'bad_email' });
         return;
       }
 
@@ -1956,6 +1959,12 @@
         btn.textContent = 'Got it ✓';
         statusEl.dataset.state = 'success';
         statusEl.textContent = "Thanks — we'll be in touch about Cohort 1.";
+        // Track only non-PII signals — never name/email/goals
+        window.coTrack && window.coTrack('register_submit_success', {
+          age_band: formData.age ? (parseInt(formData.age, 10) < 18 ? 'under_18' : '18_plus') : 'unknown',
+          experience: formData.experience || '',
+          referral: formData.referral || ''
+        });
         form.reset();
         setTimeout(() => {
           btn.textContent = originalBtnText;
@@ -1966,8 +1975,20 @@
         btn.textContent = originalBtnText;
         statusEl.dataset.state = 'error';
         statusEl.textContent = err.message || 'Something went wrong. Try again?';
+        window.coTrack && window.coTrack('register_submit_error', { message: (err && err.message) || 'unknown' });
       }
     });
+  })();
+
+  // Global CTA click tracker — picks up nav, hero, section CTAs, footer pills, lang toggle.
+  (function(){
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('.btn, .register-btn, .nav__cta, .nav__lang, .footer__pill, .nav__center a, .footer__list a');
+      if (!target) return;
+      const label = (target.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 64);
+      const href = target.getAttribute('href') || '';
+      window.coTrack && window.coTrack('cta_click', { label, target: href });
+    }, true);
   })();
 
   // Animated number counters — fires when stat enters viewport
