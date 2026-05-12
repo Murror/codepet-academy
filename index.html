@@ -1691,6 +1691,10 @@
 </footer>
 
 <script>
+  // Remember chosen language for next visit. Read by middleware.js to
+  // override geo-based auto-detection once the user has made a manual pick.
+  document.cookie = 'codepet-lang=en; path=/; max-age=31536000; SameSite=Lax';
+
   // Lenis smooth-scroll — Poch.studio-style inertia.
   // Skipped entirely if the user prefers reduced motion or Lenis failed to load.
   (function(){

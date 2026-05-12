@@ -1694,6 +1694,10 @@
 </footer>
 
 <script>
+  // Ghi nhớ ngôn ngữ đã chọn. Middleware đọc cookie này để bỏ qua
+  // việc tự nhận diện theo quốc gia khi người dùng đã chủ động chọn.
+  document.cookie = 'codepet-lang=vi; path=/; max-age=31536000; SameSite=Lax';
+
   // Lenis smooth-scroll — Poch.studio-style inertia.
   // Skipped entirely if the user prefers reduced motion or Lenis failed to load.
   (function(){
