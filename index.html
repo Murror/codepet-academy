@@ -1347,18 +1347,18 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import { getAnalytics, logEvent, setUserProperties } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
 
-  // === REPLACE THE VALUES BELOW WITH YOUR FIREBASE CONFIG ===
+  // Codepet (project devpet-8f4b1) — Codepet Web app
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "G-XXXXXXXXXX"
+    apiKey: "AIzaSyCl1Eyl5WD2ggVlLBGU-l3SefdTZreDoJ8",
+    authDomain: "devpet-8f4b1.firebaseapp.com",
+    projectId: "devpet-8f4b1",
+    storageBucket: "devpet-8f4b1.firebasestorage.app",
+    messagingSenderId: "170846312834",
+    appId: "1:170846312834:web:4c7f6779e9b45cc48f179b",
+    measurementId: "G-6CBHLCG5LK"
   };
 
-  // Skip init if the config still has placeholder values (so dev/preview doesn't error).
+  // Safety check from when this was a placeholder; harmless to leave in.
   const looksLikePlaceholder = firebaseConfig.apiKey.startsWith('YOUR_');
 
   if (!looksLikePlaceholder) {
