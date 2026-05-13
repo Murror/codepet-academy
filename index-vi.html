@@ -144,18 +144,18 @@
   .section--blue   { background:var(--blue);   color:#fff; }
   .section--green  { background:var(--green);  color:#fff; }
   .section--pink   { background:var(--pink);   color:var(--ink-dark); }
-  .section--orange { background:var(--orange); color:#fff; }
+  .section--orange { background:var(--orange); color:var(--ink-dark); }
   .section--purple { background:var(--purple); color:#fff; }
   .section--red    { background:var(--red);    color:#fff; }
   .section--yellow { background:var(--yellow); color:var(--ink-dark); }
   /* When sections are colored, headings stay readable */
-  .section--blue   .h2, .section--green .h2, .section--orange .h2,
+  .section--blue   .h2, .section--green .h2,
   .section--purple .h2, .section--red .h2 { color:#fff; }
-  .section--pink   .h2, .section--yellow .h2 { color:var(--ink-dark); }
+  .section--pink   .h2, .section--orange .h2, .section--yellow .h2 { color:var(--ink-dark); }
   /* Lead text on colored sections */
-  .section--blue   .lead, .section--green .lead, .section--orange .lead,
+  .section--blue   .lead, .section--green .lead,
   .section--purple .lead, .section--red .lead { color:rgba(255,255,255,0.85); }
-  .section--pink   .lead, .section--yellow .lead { color:rgba(0,0,0,0.7); }
+  .section--pink   .lead, .section--orange .lead, .section--yellow .lead { color:rgba(0,0,0,0.7); }
   .row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
   .grid{display:grid;gap:24px}
   .grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1614,14 +1614,14 @@
     <div class="about">
       <div class="founder__photo reveal--scale" aria-hidden="true"></div>
       <div class="reveal">
-        <h3 class="h3" style="margin-bottom:14px;color:#fff">Astro Tran</h3>
-        <p style="font-size:17px;color:rgba(255,255,255,0.92);line-height:1.65;margin-bottom:14px">
+        <h3 class="h3" style="margin-bottom:14px;color:var(--ink-dark)">Astro Tran</h3>
+        <p style="font-size:17px;color:rgba(0,0,0,0.82);line-height:1.65;margin-bottom:14px">
           Với 20 năm kinh nghiệm tại các tập đoàn công nghệ hàng đầu như Google và Meta, Astro còn tự tay xây dựng
           và vận hành sản phẩm của riêng mình, MURROR. Anh luôn tin rằng trong một thế giới thay đổi nhanh đến chóng
           mặt, không có cách học nào hiệu quả hơn việc bước vào cuộc chơi thực tế càng sớm càng tốt. Bởi khi thất bại
           sớm, bạn vẫn còn trẻ để đứng dậy và đi tiếp.
         </p>
-        <p style="font-size:17px;color:rgba(255,255,255,0.92);line-height:1.65">
+        <p style="font-size:17px;color:rgba(0,0,0,0.82);line-height:1.65">
           Từng là thành viên của team NPE (New Product Experiment) tại Meta, Astro luôn đi đầu trong việc đưa ra
           những ý tưởng mới. Anh hiểu rằng sự thông minh và nhanh nhạy của thế hệ trẻ chính là điều sẽ đưa thế giới
           đi xa hơn rất nhiều.
@@ -1639,13 +1639,13 @@
         <h3 class="h2" style="margin-top:24px">Làm việc cùng Codepet.</h3>
       </div>
       <div>
-        <p style="color:rgba(255,255,255,0.92)">
+        <p style="color:rgba(0,0,0,0.82)">
           Mỗi học viên sẽ có một người bạn Codepet được cài đặt trong các nền tảng coding của mình. Codepet cùng
           làm việc, phản biện và đưa ra hướng giải quyết với bạn, theo dõi dashboard và nhắc nhở khi chỉ số churn
           bắt đầu tăng. Codepet còn là người bạn đồng hành đầy đồng cảm — luôn quan tâm và thấu hiểu bạn sâu sắc,
           không chỉ trong công việc.
         </p>
-        <p style="margin-top:18px;color:rgba(255,255,255,0.92)">
+        <p style="margin-top:18px;color:rgba(0,0,0,0.82)">
           Đây là một trải nghiệm chưa từng có với một khoá học chỉ trong 12 tuần.
         </p>
         <div class="pet-explain__visual">

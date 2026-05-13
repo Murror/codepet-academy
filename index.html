@@ -139,18 +139,18 @@
   .section--blue   { background:var(--blue);   color:#fff; }
   .section--green  { background:var(--green);  color:#fff; }
   .section--pink   { background:var(--pink);   color:var(--ink-dark); }
-  .section--orange { background:var(--orange); color:#fff; }
+  .section--orange { background:var(--orange); color:var(--ink-dark); }
   .section--purple { background:var(--purple); color:#fff; }
   .section--red    { background:var(--red);    color:#fff; }
   .section--yellow { background:var(--yellow); color:var(--ink-dark); }
   /* When sections are colored, headings stay readable */
-  .section--blue   .h2, .section--green .h2, .section--orange .h2,
+  .section--blue   .h2, .section--green .h2,
   .section--purple .h2, .section--red .h2 { color:#fff; }
-  .section--pink   .h2, .section--yellow .h2 { color:var(--ink-dark); }
+  .section--pink   .h2, .section--orange .h2, .section--yellow .h2 { color:var(--ink-dark); }
   /* Lead text on colored sections */
-  .section--blue   .lead, .section--green .lead, .section--orange .lead,
+  .section--blue   .lead, .section--green .lead,
   .section--purple .lead, .section--red .lead { color:rgba(255,255,255,0.85); }
-  .section--pink   .lead, .section--yellow .lead { color:rgba(0,0,0,0.7); }
+  .section--pink   .lead, .section--orange .lead, .section--yellow .lead { color:rgba(0,0,0,0.7); }
   .row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
   .grid{display:grid;gap:24px}
   .grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1608,12 +1608,12 @@
     <div class="about">
       <div class="founder__photo reveal--scale" aria-hidden="true"></div>
       <div class="reveal">
-        <h3 class="h3" style="margin-bottom:14px;color:#fff">Astro Tran</h3>
-        <p style="font-size:17px;color:rgba(255,255,255,0.92);line-height:1.65;margin-bottom:14px">
+        <h3 class="h3" style="margin-bottom:14px;color:var(--ink-dark)">Astro Tran</h3>
+        <p style="font-size:17px;color:rgba(0,0,0,0.82);line-height:1.65;margin-bottom:14px">
           Twenty years across Google and Meta. Built and currently operates MURROR using a team of just twenty AI agents.
           Lives in HCMC. Teaches every cohort live, personally — no associates, no TAs reading from a deck.
         </p>
-        <p style="font-size:17px;color:rgba(255,255,255,0.92);line-height:1.65">
+        <p style="font-size:17px;color:rgba(0,0,0,0.82);line-height:1.65">
           Codepet exists because the next great founder will be born the moment they're invested in early. Astro thinks that
           moment is happening to teenagers in Saigon and Hanoi right now.
         </p>
@@ -1630,13 +1630,13 @@
         <h3 class="h2" style="margin-top:24px">Working with Codepet.</h3>
       </div>
       <div>
-        <p style="color:rgba(255,255,255,0.92)">
+        <p style="color:rgba(0,0,0,0.82)">
           Every student gets a Codepet — an AI companion installed inside your coding tools. Codepet works alongside
           you, pushes back on your decisions and suggests how to solve problems, watches your dashboards, and nudges
           you when churn starts ticking up. Codepet is also a deeply empathetic companion — caring about you and
           understanding you on a personal level, not just in your work.
         </p>
-        <p style="margin-top:18px;color:rgba(255,255,255,0.92)">
+        <p style="margin-top:18px;color:rgba(0,0,0,0.82)">
           It's an experience unlike anything else you'll find in a 12-week course.
         </p>
         <div class="pet-explain__visual">
