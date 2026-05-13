@@ -49,26 +49,6 @@
 
   *{box-sizing:border-box;margin:0;padding:0}
 
-  /* Content protection — disables text selection and image dragging.
-     Form fields stay selectable so the registration form keeps working. */
-  body{
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
-    -webkit-touch-callout:none;
-  }
-  input,textarea,select,[contenteditable="true"]{
-    -webkit-user-select:text;
-    -moz-user-select:text;
-    -ms-user-select:text;
-    user-select:text;
-  }
-  img{
-    -webkit-user-drag:none;
-    user-drag:none;
-    -webkit-touch-callout:none;
-  }
   /* Lenis smooth-scroll — required CSS hooks. Native smooth-scroll is disabled
      while Lenis is active so the two engines don't fight each other. */
   html.lenis,html.lenis body{height:auto}
@@ -1765,38 +1745,6 @@
   // Remember chosen language for next visit. Read by middleware.js to
   // override geo-based auto-detection once the user has made a manual pick.
   document.cookie = 'codepet-lang=en; path=/; max-age=31536000; SameSite=Lax';
-
-  // Content protection — discourages casual copying of copy and assets.
-  // Not real security: View Source, "Save Page As", screenshots, and
-  // disabling JS all bypass it. Stops casual right-click + drag, though.
-  (function(){
-    const isForm = (el) => el && el.matches && el.matches('input, textarea, select, [contenteditable="true"]');
-
-    // Block right-click context menu
-    document.addEventListener('contextmenu', (e) => { if (!isForm(e.target)) e.preventDefault(); });
-
-    // Block text-selection start
-    document.addEventListener('selectstart', (e) => { if (!isForm(e.target)) e.preventDefault(); });
-
-    // Block copy / cut
-    document.addEventListener('copy', (e) => { if (!isForm(e.target)) e.preventDefault(); });
-    document.addEventListener('cut', (e) => { if (!isForm(e.target)) e.preventDefault(); });
-
-    // Block dragging images out of the page
-    document.addEventListener('dragstart', (e) => {
-      if (e.target.tagName === 'IMG') e.preventDefault();
-    });
-
-    // Block common shortcuts: F12, Ctrl/Cmd+U (view source), Ctrl/Cmd+S (save),
-    // Ctrl/Cmd+P (print), Ctrl/Cmd+Shift+I/J/C (DevTools).
-    document.addEventListener('keydown', (e) => {
-      const k = (e.key || '').toLowerCase();
-      const mod = e.ctrlKey || e.metaKey;
-      if (k === 'f12') { e.preventDefault(); return; }
-      if (mod && (k === 'u' || k === 's' || k === 'p')) { e.preventDefault(); return; }
-      if (mod && e.shiftKey && ['i','j','c'].includes(k)) { e.preventDefault(); return; }
-    });
-  })();
 
   // Lenis smooth-scroll — Poch.studio-style inertia.
   // Skipped entirely if the user prefers reduced motion or Lenis failed to load.
