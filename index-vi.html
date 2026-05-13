@@ -286,18 +286,19 @@
     image-rendering:crisp-edges;
     display:block;
   }
-  /* ACADEMY sits below Codepet, stretched via SVG textLength so it spans
-     exactly from the "C" to the "T" of the wordmark image above. */
+  /* ACADEMY sits below the Codepet wordmark — Open Sans 700, black,
+     widely letter-spaced so the word visually spans the wordmark width. */
   .nav__brand-academy{
     display:block;
     width:100%;
-    height:14px;
-    color:#1a1a1a;
-  }
-  .nav__brand-academy text{
+    text-align:center;
     font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
     font-weight:700;
-    fill:currentColor;
+    font-size:14px;
+    color:#1a1a1a;
+    letter-spacing:0.55em;
+    padding-left:0.55em; /* compensate trailing space so the word visually centres */
+    line-height:1;
   }
   @media (max-width:880px){
     .nav__brand-img{height:32px}
@@ -1385,9 +1386,7 @@
     <div class="nav__pill">
       <a href="https://code-pet.com/" class="nav__brand" aria-label="Codepet Academy">
         <img src="codepet-wordmark.png" alt="Codepet" class="nav__brand-img">
-        <svg class="nav__brand-academy" viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true">
-          <text x="0" y="11" textLength="100" lengthAdjust="spacingAndGlyphs" font-size="11">ACADEMY</text>
-        </svg>
+        <span class="nav__brand-academy">ACADEMY</span>
       </a>
       <div class="nav__center">
         <a href="#about">Về Codepet</a>
