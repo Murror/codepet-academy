@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Codepet Academy — Shop Mockup</title>
+<style>
+@font-face {
+  font-family: 'PixelFont';
+  src: url('fonts/upheavtt.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0a0512;
+  font-family: 'PixelFont', 'Courier New', monospace;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  overflow: hidden;
+  image-rendering: pixelated;
+}
+
+/* Greenish blobs in background */
+.bg-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.5;
+  z-index: 0;
+}
+.bg-blob.b1 { width: 200px; height: 200px; background: #4a7a2a; top: 10%; left: 8%; }
+.bg-blob.b2 { width: 280px; height: 280px; background: #5a8a3a; top: 60%; left: 15%; }
+.bg-blob.b3 { width: 240px; height: 240px; background: #3a6a1a; top: 20%; right: 10%; }
+.bg-blob.b4 { width: 180px; height: 180px; background: #6a9a4a; bottom: 12%; right: 14%; }
+
+/* Monitor frame */
+.monitor {
+  position: relative;
+  z-index: 1;
+  width: 1100px;
+  height: 820px;
+  background: #b13e8c;
+  border-radius: 24px;
+  padding: 36px 56px;
+  box-shadow:
+    inset 0 0 0 8px #8a2d6e,
+    inset 0 0 0 12px #5e1d4a;
+  image-rendering: pixelated;
+}
+
+/* Grime blotches on the monitor */
+.monitor::before,
+.monitor::after {
+  content: "";
+  position: absolute;
+  background: #7e2660;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.monitor::before {
+  width: 110px; height: 80px;
+  top: 60px; left: 30px;
+  transform: rotate(-12deg);
+  opacity: 0.7;
+}
+.monitor::after {
+  width: 90px; height: 60px;
+  top: 18px; right: 80px;
+  transform: rotate(8deg);
+  opacity: 0.6;
+}
+
+/* Vent slits on left */
+.vents {
+  position: absolute;
+  left: 16px;
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vents span {
+  width: 6px;
+  height: 56px;
+  background: #5e1d4a;
+  border-radius: 2px;
+}
+
+/* Power button on right */
+.power {
+  position: absolute;
+  right: 22px;
+  bottom: 36px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1fcf3b;
+  box-shadow: inset 0 -3px 0 0 #137a23, 0 0 18px #2fff4f;
+}
+
+/* Embossed "Codepet" brand on bottom */
+.brand {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'PixelFont', monospace;
+  font-size: 26px;
+  color: #5e1d4a;
+  letter-spacing: 0.04em;
+  text-shadow:
+    1px 1px 0 #d769b0,
+    -1px -1px 0 #6e2455;
+}
+
+/* Inner screen */
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #06210d;
+  border-radius: 12px;
+  border: 6px solid #1a0a14;
+  padding: 32px 36px 28px;
+  overflow: hidden;
+  font-family: 'PixelFont', monospace;
+  color: #4dff4d;
+  text-shadow: 0 0 6px rgba(77, 255, 77, 0.6);
+  image-rendering: pixelated;
+}
+
+/* CRT scanlines */
+.screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* CRT curvature glow */
+.screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.5) 100%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Header */
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 6;
+  padding-bottom: 14px;
+  border-bottom: 2px dashed #2a9a3a;
+}
+.title-block h1 {
+  font-size: 44px;
+  color: #ff6bd0;
+  text-shadow: 0 0 12px rgba(255, 107, 208, 0.8);
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+}
+.title-block h2 {
+  font-size: 22px;
+  color: #4dff4d;
+  margin-top: 6px;
+  letter-spacing: 0.12em;
+}
+.close {
+  font-size: 28px;
+  color: #4dff4d;
+  background: transparent;
+  border: 3px solid #4dff4d;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+/* Item grid */
+.grid {
+  position: relative;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 18px;
+  margin-top: 22px;
+}
+.card {
+  background: rgba(8, 50, 18, 0.7);
+  border: 3px solid #4dff4d;
+  border-radius: 4px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 88px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+/* Pixel art icons via SVG */
+.icon {
+  width: 80px;
+  height: 80px;
+  image-rendering: pixelated;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.diamond-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  color: #ff6bd0;
+  text-shadow: 0 0 6px rgba(255, 107, 208, 0.6);
+}
+.diamond-num .dia {
+  color: #4dff4d;
+  text-shadow: 0 0 6px rgba(77, 255, 77, 0.7);
+}
+.card-title {
+  font-size: 18px;
+  color: #4dff4d;
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+
+/* ADD buttons */
+.add-btn {
+  font-family: 'PixelFont', monospace;
+  font-size: 18px;
+  color: #ffffff;
+  padding: 10px 16px;
+  border: 3px solid #1a0a14;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.06em;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
+}
+.add-btn--red    { background: #e24b4a; }
+.add-btn--blue   { background: #1C40CF; }
+.add-btn--yellow { background: #f0a500; color: #1a0a14; text-shadow: 1px 1px 0 rgba(255,255,255,0.4); }
+.add-btn--purple { background: #9538cf; }
+
+/* Footer */
+.footer {
+  position: relative;
+  z-index: 6;
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 14px;
+  border-top: 2px dashed #2a9a3a;
+}
+.instruction {
+  font-size: 16px;
+  color: #4dff4d;
+  max-width: 60%;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+.instruction .prompt {
+  color: #ff6bd0;
+  text-shadow: 0 0 6px rgba(255, 107, 208, 0.6);
+}
+.cart {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: #4dff4d;
+  letter-spacing: 0.04em;
+}
+.cart .book-icon {
+  width: 32px;
+  height: 32px;
+}
+.cart .dia {
+  color: #ff6bd0;
+  text-shadow: 0 0 6px rgba(255, 107, 208, 0.6);
+}
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 16px;
+  background: #4dff4d;
+  margin-left: 6px;
+  vertical-align: -2px;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-blob b1"></div>
+<div class="bg-blob b2"></div>
+<div class="bg-blob b3"></div>
+<div class="bg-blob b4"></div>
+
+<div class="monitor">
+  <div class="vents"><span></span><span></span><span></span></div>
+  <div class="power"></div>
+  <div class="brand">Codepet</div>
+
+  <div class="screen">
+    <div class="screen-header">
+      <div class="title-block">
+        <h1>CODEPET</h1>
+        <h2>ACADEMY</h2>
+      </div>
+      <button class="close">×</button>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <img class="icon" src="pets/icon-mushroom.png" alt="Mushroom">
+        <div class="card-info">
+          <span class="diamond-num"><span class="dia">◆</span>1</span>
+          <span class="card-title">MINDSET<br>&amp; IDEA</span>
+        </div>
+        <button class="add-btn add-btn--red">ADD</button>
+      </div>
+
+      <div class="card">
+        <img class="icon" src="pets/icon-gameboy.png" alt="Gameboy">
+        <div class="card-info">
+          <span class="diamond-num"><span class="dia">◆</span>2</span>
+          <span class="card-title">BUILD<br>THE AGENT</span>
+        </div>
+        <button class="add-btn add-btn--blue">ADD</button>
+      </div>
+
+      <div class="card">
+        <img class="icon" src="pets/icon-fire.png" alt="Fire">
+        <div class="card-info">
+          <span class="diamond-num"><span class="dia">◆</span>3</span>
+          <span class="card-title">LAUNCH AS<br>A STARTUP</span>
+        </div>
+        <button class="add-btn add-btn--yellow">ADD</button>
+      </div>
+
+      <div class="card">
+        <img class="icon" src="pets/icon-coin.png" alt="Coin">
+        <div class="card-info">
+          <span class="diamond-num"><span class="dia">◆</span>4</span>
+          <span class="card-title">SCALE OR<br>PIVOT</span>
+        </div>
+        <button class="add-btn add-btn--purple">ADD</button>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <div class="instruction">
+        PRESS 'ADD' BUTTON TO ADD CODEPET IN LEARNING SYSTEM..<br>
+        <span class="prompt">&gt;</span><span class="cursor"></span>
+      </div>
+      <div class="cart">
+        <svg class="book-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="12" height="12" fill="#4dff4d"/>
+          <rect x="3" y="3" width="10" height="10" fill="#06210d"/>
+          <rect x="4" y="5" width="8" height="1" fill="#4dff4d"/>
+          <rect x="4" y="8" width="8" height="1" fill="#4dff4d"/>
+          <rect x="4" y="11" width="5" height="1" fill="#4dff4d"/>
+        </svg>
+        <span><span class="dia">◆</span>0 &nbsp; LESSON IN YOUR SYSTEM:0</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
