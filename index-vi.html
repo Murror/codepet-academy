@@ -438,7 +438,21 @@
   .founder-form__pitch{display:flex;flex-direction:column;gap:14px;}
   .founder-form__pitch[hidden]{display:none;}
 
-  /* Pitch attachment toggle — link vs file */
+  /* OR divider giữa link và file upload */
+  .pitch-or-divider{
+    display:flex;align-items:center;gap:12px;
+    color:var(--muted);
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:12px;font-weight:700;letter-spacing:0.15em;
+    text-align:center;
+  }
+  .pitch-or-divider::before,
+  .pitch-or-divider::after{
+    content:"";flex:1;height:1px;background:rgba(0,0,0,0.12);
+  }
+  .pitch-or-divider span{padding:0 4px;}
+
+  /* Legacy toggle (giữ lại nếu trang khác còn dùng) */
   .pitch-attach-toggle{display:flex;gap:10px;border:none;padding:0;margin:0;}
   .pitch-attach-opt{
     flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
@@ -1916,32 +1930,19 @@
           <label class="founder-form__radio"><input type="radio" name="ideaStatus" value="fresh-start"> Chưa — bắt đầu từ con số 0</label>
         </fieldset>
         <div class="founder-form__pitch" id="pitchFields" hidden>
-          <!-- Toggle: link vs file -->
-          <fieldset class="pitch-attach-toggle" aria-label="Cách chia sẻ pitch của bạn">
-            <label class="pitch-attach-opt">
-              <input type="radio" name="pitchAttachType" value="link" checked>
-              <span>Dán đường link</span>
-            </label>
-            <label class="pitch-attach-opt">
-              <input type="radio" name="pitchAttachType" value="file">
-              <span>Tải file lên</span>
-            </label>
-          </fieldset>
+          <!-- Founders có thể dán link HOẶC tải file lên — không cần chọn,
+               input nào có nội dung sẽ được gửi lên. -->
+          <input type="url" name="pitchLink" placeholder="Link tới deck của bạn (Google Drive, Notion, Figma…)" aria-label="Link pitch" class="register-input">
 
-          <div class="pitch-attach-field" data-attach="link">
-            <input type="url" name="pitchLink" placeholder="Link tới deck của bạn (Google Drive, Notion, Figma...)" aria-label="Link pitch" class="register-input">
-          </div>
+          <div class="pitch-or-divider" aria-hidden="true"><span>HOẶC</span></div>
 
-          <div class="pitch-attach-field" data-attach="file" hidden>
-            <label class="register-file">
-              <input type="file" name="pitchFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.key,.png,.jpg,.jpeg" class="register-file__input" id="pitchFileInput">
-              <span class="register-file__chip" id="pitchFileLabel">
-                <span class="register-file__icon" aria-hidden="true">📎</span>
-                <span class="register-file__text">Chọn file (PDF, PPT, DOC, hình ảnh)</span>
-              </span>
-            </label>
-            <p class="register-file__hint">Sau khi gửi đăng ký, chúng tôi sẽ email để nhận file của bạn.</p>
-          </div>
+          <label class="register-file">
+            <input type="file" name="pitchFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.key,.png,.jpg,.jpeg" class="register-file__input" id="pitchFileInput">
+            <span class="register-file__chip" id="pitchFileLabel">
+              <span class="register-file__icon" aria-hidden="true">📎</span>
+              <span class="register-file__text">Tải file lên (PDF, PPT, DOC, hình ảnh — tối đa 4MB)</span>
+            </span>
+          </label>
 
           <input type="text" name="pitchSummary" placeholder="Mô tả ý tưởng của bạn trong một câu" aria-label="Mô tả một câu" class="register-input">
         </div>
@@ -2230,14 +2231,17 @@
       const track = formData.track || 'cohort';
       window.coTrack && window.coTrack('register_submit_attempt', { track: track });
 
-      // Capture file metadata + read as base64 so the Apps Script can
-      // decode and upload to Drive. 4MB cap to fit under Vercel's free
-      // tier API body limit.
+      // Pitch attachment: file ưu tiên hơn link nếu cả hai đều được điền.
+      // File đọc dạng base64 để Apps Script decode rồi upload lên Drive.
+      // Giới hạn 4MB để fit dưới Vercel free tier body limit.
       const MAX_FILE_BYTES = 4 * 1024 * 1024;
-      const attachType = formData.pitchAttachType || 'link';
       const fileInput = document.getElementById('pitchFileInput');
       const file = fileInput && fileInput.files && fileInput.files[0];
-      if (attachType === 'file' && file) {
+      formData.pitchFileName = '';
+      formData.pitchFileSize = '';
+      formData.pitchFileType = '';
+      formData.pitchFileData = '';
+      if (file) {
         if (file.size > MAX_FILE_BYTES) {
           statusEl.dataset.state = 'error';
           statusEl.textContent = 'File quá 4MB — vui lòng dùng link thay thế (Google Drive, Notion, Figma…).';
@@ -2256,18 +2260,15 @@
           formData.pitchFileSize = file.size;
           formData.pitchFileType = file.type || 'application/octet-stream';
           formData.pitchFileData = base64;
-          formData.pitchLink = '';
+          formData.pitchAttachType = 'file';
         } catch (err) {
           statusEl.dataset.state = 'error';
           statusEl.textContent = 'Không đọc được file. Vui lòng thử file nhỏ hơn hoặc dùng link.';
           window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'file_read_failed', track: track });
           return;
         }
-      } else if (attachType === 'link') {
-        formData.pitchFileName = '';
-        formData.pitchFileSize = '';
-        formData.pitchFileType = '';
-        formData.pitchFileData = '';
+      } else {
+        formData.pitchAttachType = 'link';
       }
       delete formData.pitchFile;
 

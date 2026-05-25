@@ -453,8 +453,21 @@
   }
   .founder-form__pitch[hidden]{ display:none; }
 
-  /* Pitch attachment toggle — two pills, "Paste a link" vs "Upload
-     a file". Selected pill picks up Codepet purple. */
+  /* "OR" divider between link input and file upload chip. */
+  .pitch-or-divider{
+    display:flex;align-items:center;gap:12px;
+    color:var(--muted);
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:12px;font-weight:700;letter-spacing:0.15em;
+    text-align:center;
+  }
+  .pitch-or-divider::before,
+  .pitch-or-divider::after{
+    content:"";flex:1;height:1px;background:rgba(0,0,0,0.12);
+  }
+  .pitch-or-divider span{padding:0 4px;}
+
+  /* Legacy toggle styles — kept in case other pages use them. */
   .pitch-attach-toggle{
     display:flex;gap:10px;border:none;padding:0;margin:0;
   }
@@ -1958,36 +1971,20 @@
           <label class="founder-form__radio"><input type="radio" name="ideaStatus" value="fresh-start"> No — starting fresh</label>
         </fieldset>
         <div class="founder-form__pitch" id="pitchFields" hidden>
-          <!-- Attachment type toggle: founders pick whether they want to
-               paste a link OR upload a file. The active input swaps via JS
-               (see #pitchFields handler below). -->
-          <fieldset class="pitch-attach-toggle" aria-label="How to share your pitch">
-            <label class="pitch-attach-opt">
-              <input type="radio" name="pitchAttachType" value="link" checked>
-              <span>Paste a link</span>
-            </label>
-            <label class="pitch-attach-opt">
-              <input type="radio" name="pitchAttachType" value="file">
-              <span>Upload a file</span>
-            </label>
-          </fieldset>
+          <!-- Founders can paste a link OR upload a file (or both). Whichever
+               has content goes to the backend. No toggle needed — both
+               inputs are visible so it's impossible to "forget" to switch. -->
+          <input type="url" name="pitchLink" placeholder="Link to your deck (Google Drive, Notion, Figma…)" aria-label="Pitch link" class="register-input">
 
-          <!-- Link input (visible by default) -->
-          <div class="pitch-attach-field" data-attach="link">
-            <input type="url" name="pitchLink" placeholder="Link to your deck (Google Drive, Notion, Figma...)" aria-label="Pitch link" class="register-input">
-          </div>
+          <div class="pitch-or-divider" aria-hidden="true"><span>OR</span></div>
 
-          <!-- File input (shown when 'Upload a file' is selected) -->
-          <div class="pitch-attach-field" data-attach="file" hidden>
-            <label class="register-file">
-              <input type="file" name="pitchFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.key,.png,.jpg,.jpeg" class="register-file__input" id="pitchFileInput">
-              <span class="register-file__chip" id="pitchFileLabel">
-                <span class="register-file__icon" aria-hidden="true">📎</span>
-                <span class="register-file__text">Choose a file (PDF, PPT, DOC, image)</span>
-              </span>
-            </label>
-            <p class="register-file__hint">After submitting, we&rsquo;ll email you to collect the file.</p>
-          </div>
+          <label class="register-file">
+            <input type="file" name="pitchFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.key,.png,.jpg,.jpeg" class="register-file__input" id="pitchFileInput">
+            <span class="register-file__chip" id="pitchFileLabel">
+              <span class="register-file__icon" aria-hidden="true">📎</span>
+              <span class="register-file__text">Upload a file (PDF, PPT, DOC, image — max 4MB)</span>
+            </span>
+          </label>
 
           <input type="text" name="pitchSummary" placeholder="Describe your idea in one sentence" aria-label="One-sentence pitch" class="register-input">
         </div>
@@ -2287,16 +2284,19 @@
       const track = formData.track || 'cohort';
       window.coTrack && window.coTrack('register_submit_attempt', { track: track });
 
-      // File inputs serialise to an empty object in JSON, so capture
-      // the selected file's metadata explicitly + read the binary as
-      // base64 so the Apps Script can decode and upload to Drive.
-      // Limit ourselves to 4MB because Vercel's free tier caps API
-      // request bodies at 4.5MB.
+      // Pitch attachment: file takes priority if both a file AND a link
+      // are filled in. File is read as base64 so the Apps Script can
+      // decode and upload to Drive. 4MB cap to fit under Vercel's free
+      // API body limit.
       const MAX_FILE_BYTES = 4 * 1024 * 1024;
-      const attachType = formData.pitchAttachType || 'link';
       const fileInput = document.getElementById('pitchFileInput');
       const file = fileInput && fileInput.files && fileInput.files[0];
-      if (attachType === 'file' && file) {
+      // Default empty values
+      formData.pitchFileName = '';
+      formData.pitchFileSize = '';
+      formData.pitchFileType = '';
+      formData.pitchFileData = '';
+      if (file) {
         if (file.size > MAX_FILE_BYTES) {
           statusEl.dataset.state = 'error';
           statusEl.textContent = 'File is over 4MB — please use a link instead (Google Drive, Notion, Figma…).';
@@ -2310,24 +2310,20 @@
             reader.onerror = () => reject(reader.error);
             reader.readAsDataURL(file);
           });
-          // Strip the data:URL prefix to leave bare base64
           const base64 = String(dataUrl).split(',')[1] || '';
           formData.pitchFileName = file.name;
           formData.pitchFileSize = file.size;
           formData.pitchFileType = file.type || 'application/octet-stream';
           formData.pitchFileData = base64;
-          formData.pitchLink = '';
+          formData.pitchAttachType = 'file';
         } catch (err) {
           statusEl.dataset.state = 'error';
           statusEl.textContent = "Couldn't read the file. Try a smaller file or use a link.";
           window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'file_read_failed', track: track });
           return;
         }
-      } else if (attachType === 'link') {
-        formData.pitchFileName = '';
-        formData.pitchFileSize = '';
-        formData.pitchFileType = '';
-        formData.pitchFileData = '';
+      } else {
+        formData.pitchAttachType = 'link';
       }
       delete formData.pitchFile;
 
