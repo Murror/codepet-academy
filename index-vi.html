@@ -408,6 +408,74 @@
   .register-form .row{display:flex;gap:12px}
   .register-form .row > *{flex:1;min-width:0}
 
+  /* Track selector — two side-by-side radio cards above the form. */
+  .track-selector{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;
+    border:none;padding:0;margin:0 0 4px;
+  }
+  .track-option{
+    display:flex;flex-direction:column;gap:4px;
+    padding:18px 20px;background:#fff;
+    border:2px solid var(--ink-dark);border-radius:14px;
+    cursor:pointer;text-align:left;
+    transition:filter .15s ease, transform .15s ease, background .15s ease;
+    position:relative;
+  }
+  .track-option input{position:absolute;opacity:0;pointer-events:none;}
+  .track-option__title{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    letter-spacing:0.06em;font-size:14px;text-transform:uppercase;
+    color:var(--ink-dark);
+  }
+  .track-option__sub{font-size:13px;color:var(--muted);}
+  .track-option:hover{filter:brightness(0.98);transform:translateY(-1px);}
+  .track-option:has(input:checked){background:var(--purple);border-color:var(--purple);}
+  .track-option:has(input:checked) .track-option__title{color:#fff;}
+  .track-option:has(input:checked) .track-option__sub{color:rgba(255,255,255,0.85);}
+
+  .track-fields{display:flex;flex-direction:column;gap:14px;}
+  .track-fields[hidden]{display:none;}
+  .founder-form__pitch{display:flex;flex-direction:column;gap:14px;}
+  .founder-form__pitch[hidden]{display:none;}
+
+  /* Pitch attachment toggle — link vs file */
+  .pitch-attach-toggle{display:flex;gap:10px;border:none;padding:0;margin:0;}
+  .pitch-attach-opt{
+    flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 16px;background:#fff;
+    border:2px solid var(--ink-dark);border-radius:10px;cursor:pointer;
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:14px;font-weight:600;color:var(--ink-dark);
+    transition:filter .15s ease, transform .15s ease, background .15s ease;
+  }
+  .pitch-attach-opt input{position:absolute;opacity:0;pointer-events:none;}
+  .pitch-attach-opt:hover{filter:brightness(0.98);transform:translateY(-1px);}
+  .pitch-attach-opt:has(input:checked){background:var(--purple);border-color:var(--purple);color:#fff;}
+  .pitch-attach-field[hidden]{display:none;}
+
+  /* Styled file input */
+  .register-file{display:flex;flex-direction:column;gap:6px;cursor:pointer;}
+  .register-file__input{position:absolute;opacity:0;width:0;height:0;}
+  .register-file__chip{
+    display:flex;align-items:center;gap:10px;padding:22px 24px;
+    background:#fff;border:2px solid var(--ink-dark);border-radius:14px;
+    color:var(--ink-dark);
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:15px;
+    transition:filter .15s ease, background .15s ease;
+  }
+  .register-file:hover .register-file__chip{filter:brightness(0.98);}
+  .register-file__input:focus + .register-file__chip{outline:2px solid var(--purple);outline-offset:2px;}
+  .register-file__icon{font-size:18px;}
+  .register-file__chip[data-has-file="true"]{
+    background:color-mix(in srgb, var(--purple) 8%, #fff);
+    border-color:var(--purple);
+  }
+  .register-file__hint{
+    font-size:12px;color:var(--muted);margin:0;
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  }
+
   .register-input,.register-select{
     font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
     font-size:16px;letter-spacing:0.01em;text-transform:none;
@@ -1528,9 +1596,7 @@
     <span class="word">Vận</span> <span class="word">hành</span> <span class="word">trong</span> <span class="word">thế</span> <span class="word">giới</span> <span class="word">thật.</span>
   </h1>
   <p class="hero__sub reveal" style="margin-left:auto;margin-right:auto">
-    Chỉ sau 12 tuần, bạn sẽ có đầy đủ kiến thức và kỹ năng cần thiết để trở thành
-    một founder. Không phải lý thuyết suông — mà là tự tay xây dựng một sản phẩm
-    thật, có khách hàng thật sẵn sàng trả tiền.
+    Chương trình dành cho học viên từ 12 tuổi trở lên.
   </p>
   <div class="hero__cta reveal">
     <a href="#register" class="btn btn--primary btn--lg">Tìm hiểu thêm</a>
@@ -1787,18 +1853,108 @@
     </div>
 
     <form class="register-form register-form--full reveal" id="fullRegisterForm" novalidate>
+      <!-- Track selector — chọn giữa khóa học 12 tuần và tư vấn 1:1 -->
+      <fieldset class="track-selector" aria-label="Chọn hình thức tham gia">
+        <label class="track-option">
+          <input type="radio" name="track" value="cohort" checked>
+          <span class="track-option__title">Tham gia khóa học</span>
+          <span class="track-option__sub">Xây dựng &amp; ra mắt trong 12 tuần</span>
+        </label>
+        <label class="track-option">
+          <input type="radio" name="track" value="founder">
+          <span class="track-option__title">Tôi là founder</span>
+          <span class="track-option__sub">Bắt đầu một dự án 1:1 với Astro</span>
+        </label>
+      </fieldset>
+
+      <!-- Common: name + email -->
       <div class="row">
         <input type="text" name="name" placeholder="Họ và tên" aria-label="Họ và tên" required class="register-input">
         <input type="email" name="email" placeholder="Email" aria-label="Email" required class="register-input">
       </div>
-      <input type="number" name="age" placeholder="Tuổi" aria-label="Tuổi" min="10" max="80" required class="register-input">
-      <select name="experience" aria-label="Kinh nghiệm lập trình" required class="register-input register-select">
-        <option value="" disabled selected>Kinh nghiệm lập trình</option>
-        <option value="none">Chưa có — hoàn toàn mới</option>
-        <option value="some">Cơ bản (Scratch, HTML, v.v.)</option>
-        <option value="comfortable">Tự tin — đã làm vài dự án nhỏ</option>
-        <option value="advanced">Nâng cao — viết code thường xuyên</option>
-      </select>
+
+      <!-- COHORT-only fields -->
+      <div class="track-fields" data-track="cohort">
+        <input type="number" name="age" placeholder="Tuổi" aria-label="Tuổi" min="10" max="80" required class="register-input">
+        <select name="experience" aria-label="Kinh nghiệm lập trình" required class="register-input register-select">
+          <option value="" disabled selected>Kinh nghiệm lập trình</option>
+          <option value="none">Chưa có — hoàn toàn mới</option>
+          <option value="some">Cơ bản (Scratch, HTML, v.v.)</option>
+          <option value="comfortable">Tự tin — đã làm vài dự án nhỏ</option>
+          <option value="advanced">Nâng cao — viết code thường xuyên</option>
+        </select>
+      </div>
+
+      <!-- FOUNDER-only fields -->
+      <div class="track-fields" data-track="founder" hidden>
+        <select name="education" aria-label="Trình độ học vấn" class="register-input register-select">
+          <option value="" disabled selected>Trình độ học vấn</option>
+          <option value="high-school">Trung học</option>
+          <option value="bachelors">Cử nhân</option>
+          <option value="masters">Thạc sĩ</option>
+          <option value="phd">Tiến sĩ</option>
+          <option value="self-taught">Tự học</option>
+        </select>
+        <select name="revenueStage" aria-label="Giai đoạn gọi vốn hoặc doanh thu hàng năm" class="register-input register-select">
+          <option value="" disabled selected>Giai đoạn gọi vốn / doanh thu hàng năm</option>
+          <option value="pre-idea">Chưa có ý tưởng</option>
+          <option value="pre-revenue">Chưa có doanh thu</option>
+          <option value="under-10k">Dưới $10K MRR</option>
+          <option value="10k-100k">$10K–$100K MRR</option>
+          <option value="100k-plus">$100K+ MRR</option>
+        </select>
+        <select name="householdIncome" aria-label="Thu nhập gia đình (tùy chọn)" class="register-input register-select">
+          <option value="" selected>Thu nhập gia đình (tùy chọn)</option>
+          <option value="under-30k">Dưới $30K</option>
+          <option value="30-60k">$30K–$60K</option>
+          <option value="60-120k">$60K–$120K</option>
+          <option value="120k-plus">$120K+</option>
+        </select>
+        <fieldset class="founder-form__group">
+          <legend>Bạn đã có ý tưởng chưa?</legend>
+          <label class="founder-form__radio"><input type="radio" name="ideaStatus" value="have-pitch"> Có — tôi đã có pitch hoặc one-pager</label>
+          <label class="founder-form__radio"><input type="radio" name="ideaStatus" value="fresh-start"> Chưa — bắt đầu từ con số 0</label>
+        </fieldset>
+        <div class="founder-form__pitch" id="pitchFields" hidden>
+          <!-- Toggle: link vs file -->
+          <fieldset class="pitch-attach-toggle" aria-label="Cách chia sẻ pitch của bạn">
+            <label class="pitch-attach-opt">
+              <input type="radio" name="pitchAttachType" value="link" checked>
+              <span>Dán đường link</span>
+            </label>
+            <label class="pitch-attach-opt">
+              <input type="radio" name="pitchAttachType" value="file">
+              <span>Tải file lên</span>
+            </label>
+          </fieldset>
+
+          <div class="pitch-attach-field" data-attach="link">
+            <input type="url" name="pitchLink" placeholder="Link tới deck của bạn (Google Drive, Notion, Figma...)" aria-label="Link pitch" class="register-input">
+          </div>
+
+          <div class="pitch-attach-field" data-attach="file" hidden>
+            <label class="register-file">
+              <input type="file" name="pitchFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.key,.png,.jpg,.jpeg" class="register-file__input" id="pitchFileInput">
+              <span class="register-file__chip" id="pitchFileLabel">
+                <span class="register-file__icon" aria-hidden="true">📎</span>
+                <span class="register-file__text">Chọn file (PDF, PPT, DOC, hình ảnh)</span>
+              </span>
+            </label>
+            <p class="register-file__hint">Sau khi gửi đăng ký, chúng tôi sẽ email để nhận file của bạn.</p>
+          </div>
+
+          <input type="text" name="pitchSummary" placeholder="Mô tả ý tưởng của bạn trong một câu" aria-label="Mô tả một câu" class="register-input">
+        </div>
+        <select name="hoursPerWeek" aria-label="Số giờ mỗi tuần" class="register-input register-select">
+          <option value="" disabled selected>Số giờ bạn có thể dành mỗi tuần</option>
+          <option value="under-5">Dưới 5 giờ</option>
+          <option value="5-10">5–10 giờ</option>
+          <option value="10-20">10–20 giờ</option>
+          <option value="20-plus">20+ giờ</option>
+        </select>
+      </div>
+
+      <!-- Common: referral + goals -->
       <select name="referral" aria-label="Bạn biết đến chúng tôi từ đâu?" required class="register-input register-select">
         <option value="" disabled selected>Bạn biết đến chúng tôi từ đâu?</option>
         <option value="friend">Bạn bè hoặc người thân</option>
@@ -1808,15 +1964,14 @@
         <option value="event">Sự kiện hoặc workshop</option>
         <option value="other">Khác</option>
       </select>
-      <textarea name="goals" placeholder="Bạn muốn xây gì hoặc học gì tại Codepet Academy?" aria-label="Mục tiêu học tập" rows="4" required class="register-input register-textarea"></textarea>
-      <button type="submit" class="register-btn" id="fullRegisterBtn">Tìm hiểu thêm</button>
+      <textarea name="goals" placeholder="Bạn muốn xây gì hoặc học gì tại Codepet Academy?" aria-label="Mục tiêu" rows="4" required class="register-input register-textarea"></textarea>
+
+      <button type="submit" class="register-btn" id="fullRegisterBtn">
+        <span data-track-label="cohort">Tìm hiểu thêm</span>
+        <span data-track-label="founder" hidden>Bắt đầu dự án</span>
+      </button>
       <p id="fullRegisterStatus" class="register-status" role="status" aria-live="polite"></p>
     </form>
-
-    <div class="founder-cta reveal">
-      <p class="founder-cta__lead">Bạn là founder và đang xây dự án của riêng mình?</p>
-      <button type="button" class="founder-cta__link" id="openFounderModal">Đặt lịch tư vấn 1:1 →</button>
-    </div>
   </div>
 </section>
 
@@ -2009,29 +2164,110 @@
     });
   })();
 
-  // Full registration form (in #register section) — same backend, more fields
+  // Unified registration form (in #register section) — handles BOTH the
+  // 12-week cohort track AND the 1:1 founder consultation track.
   (function(){
     const form = document.getElementById('fullRegisterForm');
     if (!form) return;
     const btn = document.getElementById('fullRegisterBtn');
     const statusEl = document.getElementById('fullRegisterStatus');
-    const originalBtnText = btn.textContent;
+    const originalBtnHTML = btn.innerHTML;
+
+    function applyTrack() {
+      const track = (form.querySelector('input[name="track"]:checked') || {}).value || 'cohort';
+      form.querySelectorAll('.track-fields').forEach((el) => {
+        const matches = el.dataset.track === track;
+        el.hidden = !matches;
+        el.querySelectorAll('input, select, textarea').forEach((field) => {
+          if (field.name === 'householdIncome' || field.name === 'pitchLink' || field.name === 'pitchSummary' || field.name === 'pitchFile') return;
+          field.required = matches;
+        });
+      });
+      form.querySelectorAll('[data-track-label]').forEach((el) => {
+        el.hidden = el.dataset.trackLabel !== track;
+      });
+    }
+    form.querySelectorAll('input[name="track"]').forEach((input) => {
+      input.addEventListener('change', applyTrack);
+    });
+    form.addEventListener('change', (e) => {
+      if (e.target && e.target.name === 'ideaStatus') {
+        const pitch = document.getElementById('pitchFields');
+        if (pitch) pitch.hidden = e.target.value !== 'have-pitch';
+      }
+      if (e.target && e.target.name === 'pitchAttachType') {
+        const type = e.target.value;
+        form.querySelectorAll('.pitch-attach-field').forEach((el) => {
+          el.hidden = el.dataset.attach !== type;
+        });
+      }
+    });
+    const pitchFileInput = document.getElementById('pitchFileInput');
+    const pitchFileLabel = document.getElementById('pitchFileLabel');
+    if (pitchFileInput && pitchFileLabel) {
+      const originalLabelHTML = pitchFileLabel.innerHTML;
+      pitchFileInput.addEventListener('change', () => {
+        const file = pitchFileInput.files && pitchFileInput.files[0];
+        if (file) {
+          const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+          pitchFileLabel.innerHTML =
+            '<span class="register-file__icon" aria-hidden="true">✓</span>' +
+            '<span class="register-file__text">' +
+              file.name.replace(/[<>&]/g, '') + ' (' + sizeMB + ' MB)' +
+            '</span>';
+          pitchFileLabel.dataset.hasFile = 'true';
+        } else {
+          pitchFileLabel.innerHTML = originalLabelHTML;
+          pitchFileLabel.dataset.hasFile = 'false';
+        }
+      });
+    }
+    applyTrack();
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form));
-      window.coTrack && window.coTrack('register_submit_attempt');
+      const track = formData.track || 'cohort';
+      window.coTrack && window.coTrack('register_submit_attempt', { track: track });
 
-      if (!formData.name || !formData.email || !formData.age || !formData.experience || !formData.referral || !formData.goals) {
+      // Capture file metadata, since File objects don't JSON-serialise.
+      const attachType = formData.pitchAttachType || 'link';
+      const fileInput = document.getElementById('pitchFileInput');
+      const file = fileInput && fileInput.files && fileInput.files[0];
+      if (attachType === 'file' && file) {
+        formData.pitchFileName = file.name;
+        formData.pitchFileSize = file.size;
+        formData.pitchFileType = file.type || 'unknown';
+        formData.pitchLink = '';
+      } else if (attachType === 'link') {
+        formData.pitchFileName = '';
+        formData.pitchFileSize = '';
+        formData.pitchFileType = '';
+      }
+      delete formData.pitchFile;
+
+      if (!formData.name || !formData.email || !formData.referral || !formData.goals) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Vui lòng điền đầy đủ thông tin.';
-        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_field' });
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_field', track: track });
+        return;
+      }
+      if (track === 'cohort' && (!formData.age || !formData.experience)) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'Vui lòng điền đầy đủ thông tin.';
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_cohort_field', track: track });
+        return;
+      }
+      if (track === 'founder' && (!formData.education || !formData.revenueStage || !formData.ideaStatus || !formData.hoursPerWeek)) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'Vui lòng điền đầy đủ các thông tin bắt buộc cho founder.';
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_founder_field', track: track });
         return;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Email có vẻ chưa đúng — vui lòng kiểm tra lại.';
-        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'bad_email' });
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'bad_email', track: track });
         return;
       }
 
@@ -2051,24 +2287,29 @@
 
         btn.textContent = 'Đã nhận ✓';
         statusEl.dataset.state = 'success';
-        statusEl.textContent = "Cảm ơn bạn — chúng tôi sẽ liên hệ về Khóa 1.";
-        // Track only non-PII signals — never name/email/goals
+        statusEl.textContent = track === 'founder'
+          ? "Cảm ơn bạn — Astro sẽ liên hệ về buổi tư vấn."
+          : "Cảm ơn bạn — chúng tôi sẽ liên hệ về Khóa 1.";
         window.coTrack && window.coTrack('register_submit_success', {
+          track: track,
           age_band: formData.age ? (parseInt(formData.age, 10) < 18 ? 'under_18' : '18_plus') : 'unknown',
           experience: formData.experience || '',
           referral: formData.referral || ''
         });
         form.reset();
+        applyTrack();
         setTimeout(() => {
-          btn.textContent = originalBtnText;
+          btn.innerHTML = originalBtnHTML;
           btn.disabled = false;
+          applyTrack();
         }, 4000);
       } catch (err) {
         btn.disabled = false;
-        btn.textContent = originalBtnText;
+        btn.innerHTML = originalBtnHTML;
+        applyTrack();
         statusEl.dataset.state = 'error';
         statusEl.textContent = err.message || 'Có lỗi xảy ra. Bạn thử lại nhé?';
-        window.coTrack && window.coTrack('register_submit_error', { message: (err && err.message) || 'unknown' });
+        window.coTrack && window.coTrack('register_submit_error', { message: (err && err.message) || 'unknown', track: track });
       }
     });
   })();
