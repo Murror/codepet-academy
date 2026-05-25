@@ -401,6 +401,58 @@
   .register-form .row{display:flex;gap:12px}
   .register-form .row > *{flex:1;min-width:0}
 
+  /* Track selector — two side-by-side radio cards above the form
+     that switch between the cohort signup and the founder consultation. */
+  .track-selector{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    border:none;padding:0;margin:0 0 4px;
+  }
+  .track-option{
+    display:flex;flex-direction:column;gap:4px;
+    padding:18px 20px;
+    background:#fff;
+    border:2px solid var(--ink-dark);
+    border-radius:14px;
+    cursor:pointer;
+    text-align:left;
+    transition:filter .15s ease, transform .15s ease, background .15s ease;
+    position:relative;
+  }
+  .track-option input{
+    position:absolute;opacity:0;pointer-events:none;
+  }
+  .track-option__title{
+    font-family:'Upheaval TT','Press Start 2P',monospace;
+    letter-spacing:0.06em;
+    font-size:14px;
+    text-transform:uppercase;
+    color:var(--ink-dark);
+  }
+  .track-option__sub{
+    font-size:13px;color:var(--muted);
+  }
+  .track-option:hover{ filter:brightness(0.98); transform:translateY(-1px); }
+  .track-option:has(input:checked){
+    background:var(--purple);
+    border-color:var(--purple);
+  }
+  .track-option:has(input:checked) .track-option__title{ color:#fff; }
+  .track-option:has(input:checked) .track-option__sub{ color:rgba(255,255,255,0.85); }
+
+  /* Track-specific field groups + the conditional pitch fields under
+     "Do you have an idea?" — both use [hidden] to vanish, with a
+     light flex gap so each visible group reads as a coherent block. */
+  .track-fields{
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .track-fields[hidden]{ display:none; }
+  .founder-form__pitch{
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .founder-form__pitch[hidden]{ display:none; }
+
   .register-input,.register-select{
     font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
     font-size:16px;letter-spacing:0.01em;text-transform:none;
@@ -1780,18 +1832,84 @@
     </div>
 
     <form class="register-form register-form--full reveal" id="fullRegisterForm" novalidate>
+      <!-- Track selector — chooses between the 12-week cohort and the
+           1:1 founder consultation. Track-specific field groups
+           below toggle visibility + required state via JS. -->
+      <fieldset class="track-selector" aria-label="Choose your track">
+        <label class="track-option">
+          <input type="radio" name="track" value="cohort" checked>
+          <span class="track-option__title">Join the cohort</span>
+          <span class="track-option__sub">Build &amp; ship in 12 weeks</span>
+        </label>
+        <label class="track-option">
+          <input type="radio" name="track" value="founder">
+          <span class="track-option__title">I&rsquo;m a founder</span>
+          <span class="track-option__sub">Book a 1:1 with Astro</span>
+        </label>
+      </fieldset>
+
+      <!-- Common: name + email -->
       <div class="row">
         <input type="text" name="name" placeholder="Your name" aria-label="Your name" required class="register-input">
         <input type="email" name="email" placeholder="Your email" aria-label="Your email" required class="register-input">
       </div>
-      <input type="number" name="age" placeholder="Your age" aria-label="Your age" min="10" max="80" required class="register-input">
-      <select name="experience" aria-label="Coding experience" required class="register-input register-select">
-        <option value="" disabled selected>Coding experience</option>
-        <option value="none">None — total beginner</option>
-        <option value="some">Some basics (Scratch, HTML, etc.)</option>
-        <option value="comfortable">Comfortable — I've shipped small projects</option>
-        <option value="advanced">Advanced — I code regularly</option>
-      </select>
+
+      <!-- COHORT-only fields -->
+      <div class="track-fields" data-track="cohort">
+        <input type="number" name="age" placeholder="Your age" aria-label="Your age" min="10" max="80" required class="register-input">
+        <select name="experience" aria-label="Coding experience" required class="register-input register-select">
+          <option value="" disabled selected>Coding experience</option>
+          <option value="none">None — total beginner</option>
+          <option value="some">Some basics (Scratch, HTML, etc.)</option>
+          <option value="comfortable">Comfortable — I&rsquo;ve shipped small projects</option>
+          <option value="advanced">Advanced — I code regularly</option>
+        </select>
+      </div>
+
+      <!-- FOUNDER-only fields -->
+      <div class="track-fields" data-track="founder" hidden>
+        <select name="education" aria-label="Education" class="register-input register-select">
+          <option value="" disabled selected>Education</option>
+          <option value="high-school">High school</option>
+          <option value="bachelors">Bachelor&rsquo;s degree</option>
+          <option value="masters">Master&rsquo;s degree</option>
+          <option value="phd">PhD</option>
+          <option value="self-taught">Self-taught</option>
+        </select>
+        <select name="revenueStage" aria-label="Funding stage or annual revenue" class="register-input register-select">
+          <option value="" disabled selected>Funding stage / annual revenue</option>
+          <option value="pre-idea">Pre-idea</option>
+          <option value="pre-revenue">Pre-revenue</option>
+          <option value="under-10k">Under $10K MRR</option>
+          <option value="10k-100k">$10K–$100K MRR</option>
+          <option value="100k-plus">$100K+ MRR</option>
+        </select>
+        <select name="householdIncome" aria-label="Household income (optional)" class="register-input register-select">
+          <option value="" selected>Household income (optional)</option>
+          <option value="under-30k">Under $30K</option>
+          <option value="30-60k">$30K–$60K</option>
+          <option value="60-120k">$60K–$120K</option>
+          <option value="120k-plus">$120K+</option>
+        </select>
+        <fieldset class="founder-form__group">
+          <legend>Do you have an idea yet?</legend>
+          <label class="founder-form__radio"><input type="radio" name="ideaStatus" value="have-pitch"> Yes — I have a pitch or one-pager</label>
+          <label class="founder-form__radio"><input type="radio" name="ideaStatus" value="fresh-start"> No — starting fresh</label>
+        </fieldset>
+        <div class="founder-form__pitch" id="pitchFields" hidden>
+          <input type="url" name="pitchLink" placeholder="Link to your deck (Google Drive, Notion, Figma...)" aria-label="Pitch link" class="register-input">
+          <input type="text" name="pitchSummary" placeholder="Describe your idea in one sentence" aria-label="One-sentence pitch" class="register-input">
+        </div>
+        <select name="hoursPerWeek" aria-label="Hours per week" class="register-input register-select">
+          <option value="" disabled selected>Hours per week you can commit</option>
+          <option value="under-5">Under 5 hours</option>
+          <option value="5-10">5–10 hours</option>
+          <option value="10-20">10–20 hours</option>
+          <option value="20-plus">20+ hours</option>
+        </select>
+      </div>
+
+      <!-- Common: referral + goals -->
       <select name="referral" aria-label="How did you hear about us?" required class="register-input register-select">
         <option value="" disabled selected>How did you hear about us?</option>
         <option value="friend">Friend or family</option>
@@ -1801,15 +1919,14 @@
         <option value="event">Event or workshop</option>
         <option value="other">Other</option>
       </select>
-      <textarea name="goals" placeholder="What do you want to build or learn at Codepet Academy?" aria-label="Learning goals" rows="4" required class="register-input register-textarea"></textarea>
-      <button type="submit" class="register-btn" id="fullRegisterBtn">Tell me more</button>
+      <textarea name="goals" placeholder="What do you want to build or learn at Codepet Academy?" aria-label="Goals" rows="4" required class="register-input register-textarea"></textarea>
+
+      <button type="submit" class="register-btn" id="fullRegisterBtn">
+        <span data-track-label="cohort">Tell me more</span>
+        <span data-track-label="founder" hidden>Book my consult</span>
+      </button>
       <p id="fullRegisterStatus" class="register-status" role="status" aria-live="polite"></p>
     </form>
-
-    <div class="founder-cta reveal">
-      <p class="founder-cta__lead">Are you a founder with your own project?</p>
-      <button type="button" class="founder-cta__link" id="openFounderModal">Book a 1:1 consultation →</button>
-    </div>
   </div>
 </section>
 
@@ -2002,29 +2119,78 @@
     });
   })();
 
-  // Full registration form (in #register section) — same backend, more fields
+  // Unified registration form (in #register section) — handles BOTH the
+  // 12-week cohort track AND the 1:1 founder consultation track. The track
+  // radio selector toggles which field groups are shown / required, and
+  // the payload sent to /api/register always includes a `track` field
+  // so the backend can route accordingly.
   (function(){
     const form = document.getElementById('fullRegisterForm');
     if (!form) return;
     const btn = document.getElementById('fullRegisterBtn');
     const statusEl = document.getElementById('fullRegisterStatus');
-    const originalBtnText = btn.textContent;
+    const originalBtnHTML = btn.innerHTML;
+
+    // Show/hide track-specific field groups and submit-button labels,
+    // and flip the `required` attribute on inputs so HTML5 validation
+    // and our manual checks only enforce the active track's fields.
+    function applyTrack() {
+      const track = (form.querySelector('input[name="track"]:checked') || {}).value || 'cohort';
+      form.querySelectorAll('.track-fields').forEach((el) => {
+        const matches = el.dataset.track === track;
+        el.hidden = !matches;
+        el.querySelectorAll('input, select, textarea').forEach((field) => {
+          // Optional fields stay optional regardless of track
+          if (field.name === 'householdIncome' || field.name === 'pitchLink' || field.name === 'pitchSummary') return;
+          field.required = matches;
+        });
+      });
+      form.querySelectorAll('[data-track-label]').forEach((el) => {
+        el.hidden = el.dataset.trackLabel !== track;
+      });
+    }
+    form.querySelectorAll('input[name="track"]').forEach((input) => {
+      input.addEventListener('change', applyTrack);
+    });
+    // Conditional pitch-link/summary fields under "Do you have an idea?"
+    form.addEventListener('change', (e) => {
+      if (e.target && e.target.name === 'ideaStatus') {
+        const pitch = document.getElementById('pitchFields');
+        if (pitch) pitch.hidden = e.target.value !== 'have-pitch';
+      }
+    });
+    applyTrack();
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form));
-      window.coTrack && window.coTrack('register_submit_attempt');
+      const track = formData.track || 'cohort';
+      window.coTrack && window.coTrack('register_submit_attempt', { track: track });
 
-      if (!formData.name || !formData.email || !formData.age || !formData.experience || !formData.referral || !formData.goals) {
+      // Common required fields (both tracks)
+      if (!formData.name || !formData.email || !formData.referral || !formData.goals) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Please fill in all fields.';
-        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_field' });
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_field', track: track });
+        return;
+      }
+      // Track-specific required fields
+      if (track === 'cohort' && (!formData.age || !formData.experience)) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'Please fill in all fields.';
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_cohort_field', track: track });
+        return;
+      }
+      if (track === 'founder' && (!formData.education || !formData.revenueStage || !formData.ideaStatus || !formData.hoursPerWeek)) {
+        statusEl.dataset.state = 'error';
+        statusEl.textContent = 'Please fill in all required founder fields.';
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_founder_field', track: track });
         return;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'That email looks off — please check it.';
-        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'bad_email' });
+        window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'bad_email', track: track });
         return;
       }
 
@@ -2044,24 +2210,30 @@
 
         btn.textContent = 'Got it ✓';
         statusEl.dataset.state = 'success';
-        statusEl.textContent = "Thanks — we'll be in touch about Cohort 1.";
+        statusEl.textContent = track === 'founder'
+          ? "Thanks — Astro will be in touch about your consult."
+          : "Thanks — we'll be in touch about Cohort 1.";
         // Track only non-PII signals — never name/email/goals
         window.coTrack && window.coTrack('register_submit_success', {
+          track: track,
           age_band: formData.age ? (parseInt(formData.age, 10) < 18 ? 'under_18' : '18_plus') : 'unknown',
           experience: formData.experience || '',
           referral: formData.referral || ''
         });
         form.reset();
+        applyTrack();
         setTimeout(() => {
-          btn.textContent = originalBtnText;
+          btn.innerHTML = originalBtnHTML;
           btn.disabled = false;
+          applyTrack();
         }, 4000);
       } catch (err) {
         btn.disabled = false;
-        btn.textContent = originalBtnText;
+        btn.innerHTML = originalBtnHTML;
+        applyTrack();
         statusEl.dataset.state = 'error';
         statusEl.textContent = err.message || 'Something went wrong. Try again?';
-        window.coTrack && window.coTrack('register_submit_error', { message: (err && err.message) || 'unknown' });
+        window.coTrack && window.coTrack('register_submit_error', { message: (err && err.message) || 'unknown', track: track });
       }
     });
   })();
