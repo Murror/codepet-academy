@@ -2347,6 +2347,19 @@
         window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_founder_field', track: track });
         return;
       }
+      // If founder picked "Yes — I have a pitch", they must provide
+      // either a link OR a file. Catches the case where the file picker
+      // was never actually used (most common bug).
+      if (track === 'founder' && formData.ideaStatus === 'have-pitch') {
+        const hasLink = !!(formData.pitchLink && formData.pitchLink.trim());
+        const hasFile = !!formData.pitchFileData;
+        if (!hasLink && !hasFile) {
+          statusEl.dataset.state = 'error';
+          statusEl.textContent = 'Please paste a link OR upload a file for your pitch.';
+          window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_pitch', track: track });
+          return;
+        }
+      }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'That email looks off — please check it.';

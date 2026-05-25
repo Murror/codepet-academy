@@ -2290,6 +2290,18 @@
         window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_founder_field', track: track });
         return;
       }
+      // Nếu founder chọn "Có — tôi đã có pitch", phải có link HOẶC file.
+      // Bắt trường hợp người dùng quên chọn file (lỗi thường gặp nhất).
+      if (track === 'founder' && formData.ideaStatus === 'have-pitch') {
+        const hasLink = !!(formData.pitchLink && formData.pitchLink.trim());
+        const hasFile = !!formData.pitchFileData;
+        if (!hasLink && !hasFile) {
+          statusEl.dataset.state = 'error';
+          statusEl.textContent = 'Vui lòng dán link HOẶC tải file pitch lên.';
+          window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'missing_pitch', track: track });
+          return;
+        }
+      }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
         statusEl.dataset.state = 'error';
         statusEl.textContent = 'Email có vẻ chưa đúng — vui lòng kiểm tra lại.';
