@@ -2288,21 +2288,46 @@
       window.coTrack && window.coTrack('register_submit_attempt', { track: track });
 
       // File inputs serialise to an empty object in JSON, so capture
-      // the selected file's metadata explicitly. Drop the link field
-      // if the user picked "Upload a file" (and vice versa) so only
-      // the relevant attachment is forwarded.
+      // the selected file's metadata explicitly + read the binary as
+      // base64 so the Apps Script can decode and upload to Drive.
+      // Limit ourselves to 4MB because Vercel's free tier caps API
+      // request bodies at 4.5MB.
+      const MAX_FILE_BYTES = 4 * 1024 * 1024;
       const attachType = formData.pitchAttachType || 'link';
       const fileInput = document.getElementById('pitchFileInput');
       const file = fileInput && fileInput.files && fileInput.files[0];
       if (attachType === 'file' && file) {
-        formData.pitchFileName = file.name;
-        formData.pitchFileSize = file.size;
-        formData.pitchFileType = file.type || 'unknown';
-        formData.pitchLink = '';
+        if (file.size > MAX_FILE_BYTES) {
+          statusEl.dataset.state = 'error';
+          statusEl.textContent = 'File is over 4MB — please use a link instead (Google Drive, Notion, Figma…).';
+          window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'file_too_big', track: track });
+          return;
+        }
+        try {
+          const dataUrl = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          });
+          // Strip the data:URL prefix to leave bare base64
+          const base64 = String(dataUrl).split(',')[1] || '';
+          formData.pitchFileName = file.name;
+          formData.pitchFileSize = file.size;
+          formData.pitchFileType = file.type || 'application/octet-stream';
+          formData.pitchFileData = base64;
+          formData.pitchLink = '';
+        } catch (err) {
+          statusEl.dataset.state = 'error';
+          statusEl.textContent = "Couldn't read the file. Try a smaller file or use a link.";
+          window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'file_read_failed', track: track });
+          return;
+        }
       } else if (attachType === 'link') {
         formData.pitchFileName = '';
         formData.pitchFileSize = '';
         formData.pitchFileType = '';
+        formData.pitchFileData = '';
       }
       delete formData.pitchFile;
 

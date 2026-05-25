@@ -2230,19 +2230,44 @@
       const track = formData.track || 'cohort';
       window.coTrack && window.coTrack('register_submit_attempt', { track: track });
 
-      // Capture file metadata, since File objects don't JSON-serialise.
+      // Capture file metadata + read as base64 so the Apps Script can
+      // decode and upload to Drive. 4MB cap to fit under Vercel's free
+      // tier API body limit.
+      const MAX_FILE_BYTES = 4 * 1024 * 1024;
       const attachType = formData.pitchAttachType || 'link';
       const fileInput = document.getElementById('pitchFileInput');
       const file = fileInput && fileInput.files && fileInput.files[0];
       if (attachType === 'file' && file) {
-        formData.pitchFileName = file.name;
-        formData.pitchFileSize = file.size;
-        formData.pitchFileType = file.type || 'unknown';
-        formData.pitchLink = '';
+        if (file.size > MAX_FILE_BYTES) {
+          statusEl.dataset.state = 'error';
+          statusEl.textContent = 'File quá 4MB — vui lòng dùng link thay thế (Google Drive, Notion, Figma…).';
+          window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'file_too_big', track: track });
+          return;
+        }
+        try {
+          const dataUrl = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          });
+          const base64 = String(dataUrl).split(',')[1] || '';
+          formData.pitchFileName = file.name;
+          formData.pitchFileSize = file.size;
+          formData.pitchFileType = file.type || 'application/octet-stream';
+          formData.pitchFileData = base64;
+          formData.pitchLink = '';
+        } catch (err) {
+          statusEl.dataset.state = 'error';
+          statusEl.textContent = 'Không đọc được file. Vui lòng thử file nhỏ hơn hoặc dùng link.';
+          window.coTrack && window.coTrack('register_submit_validation_error', { reason: 'file_read_failed', track: track });
+          return;
+        }
       } else if (attachType === 'link') {
         formData.pitchFileName = '';
         formData.pitchFileSize = '';
         formData.pitchFileType = '';
+        formData.pitchFileData = '';
       }
       delete formData.pitchFile;
 
