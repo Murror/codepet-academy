@@ -9,14 +9,14 @@
   /* Local Codepet brand fonts */
   @font-face {
     font-family: 'Upheaval TT';
-    src: url('fonts/upheavtt.ttf') format('truetype');
+    src: url('/academy/fonts/upheavtt.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
   }
   @font-face {
     font-family: 'Open Sans';
-    src: url('fonts/OpenSans-Variable.ttf') format('truetype-variations');
+    src: url('/academy/fonts/OpenSans-Variable.ttf') format('truetype-variations');
     font-weight: 300 800;
     font-style: normal;
     font-display: swap;
@@ -641,7 +641,7 @@
   .founder__photo{
     aspect-ratio:4/5;
     border-radius:32px;
-    background-image:url('astro-tran.jpg');
+    background-image:url('/academy/astro-tran.jpg');
     background-size:118%;
     background-position:30% 8%;
     background-repeat:no-repeat;
@@ -1496,14 +1496,14 @@
   <div class="nav__inner">
     <div class="nav__pill">
       <a href="https://code-pet.com/" class="nav__brand" aria-label="Codepet Academy">
-        <img src="codepet-wordmark.png" alt="Codepet" class="nav__brand-img">
+        <img src="/academy/codepet-wordmark.png" alt="Codepet" class="nav__brand-img">
         <span class="nav__brand-academy">ACADEMY</span>
       </a>
       <div class="nav__center">
         <a href="#about">About</a>
         <a href="#program">Roadmap</a>
         <a href="#curriculum">Skills</a>
-        <a href="index-vi.html" class="nav__lang" aria-label="Chuyển sang tiếng Việt">VI</a>
+        <a href="/academy/index-vi.html" class="nav__lang" aria-label="Chuyển sang tiếng Việt">VI</a>
       </div>
       <a href="#register" class="nav__cta">Course</a>
     </div>
@@ -1540,13 +1540,13 @@
 
   <!-- Official Codepet pet row -->
   <div class="hero__pets" aria-hidden="true">
-    <img src="pets/1-pink-bear.png" alt="" class="pet-img" style="--d:0s">
-    <img src="pets/2-green-owl.png" alt="" class="pet-img" style="--d:.15s">
-    <img src="pets/3-orange-fox.png" alt="" class="pet-img" style="--d:.3s">
-    <img src="pets/4-purple-byte.png" alt="" class="pet-img" style="--d:.45s">
-    <img src="pets/5-yellow-bear.png" alt="" class="pet-img" style="--d:.6s">
-    <img src="pets/6-red-bear.png" alt="" class="pet-img" style="--d:.75s">
-    <img src="pets/7-blue-penguin.png" alt="" class="pet-img" style="--d:.9s">
+    <img src="/academy/pets/1-pink-bear.png" alt="" class="pet-img" style="--d:0s">
+    <img src="/academy/pets/2-green-owl.png" alt="" class="pet-img" style="--d:.15s">
+    <img src="/academy/pets/3-orange-fox.png" alt="" class="pet-img" style="--d:.3s">
+    <img src="/academy/pets/4-purple-byte.png" alt="" class="pet-img" style="--d:.45s">
+    <img src="/academy/pets/5-yellow-bear.png" alt="" class="pet-img" style="--d:.6s">
+    <img src="/academy/pets/6-red-bear.png" alt="" class="pet-img" style="--d:.75s">
+    <img src="/academy/pets/7-blue-penguin.png" alt="" class="pet-img" style="--d:.9s">
   </div>
 </header>
 
@@ -1758,8 +1758,8 @@
           It's an experience unlike anything else you'll find in a 12-week course.
         </p>
         <div class="pet-explain__visual">
-          <img src="pets/2-green-owl.png" alt="Codepet companion" style="--d:0s">
-          <img src="pets/1-pink-bear.png" alt="Codepet companion" style="--d:.4s">
+          <img src="/academy/pets/2-green-owl.png" alt="Codepet companion" style="--d:0s">
+          <img src="/academy/pets/1-pink-bear.png" alt="Codepet companion" style="--d:.4s">
         </div>
       </div>
     </div>
@@ -1843,7 +1843,7 @@
         <ul class="footer__list">
           <li><a href="#register">Register</a></li>
           <li><a href="#apply">Apply</a></li>
-          <li><a href="index-vi.html">Tiếng Việt</a></li>
+          <li><a href="/academy/index-vi.html">Tiếng Việt</a></li>
         </ul>
       </div>
     </div>
@@ -1975,7 +1975,7 @@
       statusEl.textContent = '';
 
       try {
-        const res = await fetch('/api/register', {
+        const res = await fetch('/academy/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
@@ -2032,7 +2032,7 @@
       statusEl.textContent = '';
 
       try {
-        const res = await fetch('/api/register', {
+        const res = await fetch('/academy/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
