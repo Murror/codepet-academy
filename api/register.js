@@ -1,6 +1,18 @@
 // Vercel serverless function — receives form POST, logs row to Google Sheet via Apps Script webhook.
 // Requires environment variables: SHEET_WEBHOOK_URL, SHEET_WEBHOOK_SECRET
 
+export const config = {
+  // Pitch file uploads arrive as base64 inside the JSON body, so we
+  // need to allow larger bodies than the default 1MB. 4.5MB is the
+  // Vercel free-tier ceiling; the frontend already enforces a 4MB
+  // limit on the raw file before base64 encoding.
+  api: {
+    bodyParser: {
+      sizeLimit: '5mb',
+    },
+  },
+};
+
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -28,7 +40,13 @@ export default async function handler(req, res) {
     pitchLink,
     pitchSummary,
     hoursPerWeek,
-    projectGoals
+    projectGoals,
+    // founder pitch attachment (link or uploaded file)
+    pitchAttachType,
+    pitchFileName,
+    pitchFileSize,
+    pitchFileType,
+    pitchFileData
   } = req.body || {};
 
   if (!name || !email) {
@@ -56,7 +74,12 @@ export default async function handler(req, res) {
       pitchLink: pitchLink || '',
       pitchSummary: pitchSummary || '',
       hoursPerWeek: hoursPerWeek || '',
-      projectGoals: projectGoals || ''
+      projectGoals: projectGoals || '',
+      pitchAttachType: pitchAttachType || '',
+      pitchFileName: pitchFileName || '',
+      pitchFileSize: pitchFileSize || '',
+      pitchFileType: pitchFileType || '',
+      pitchFileData: pitchFileData || ''
     });
 
     return res.status(200).json({ success: true });
@@ -81,7 +104,12 @@ async function logToSheet({
   pitchLink,
   pitchSummary,
   hoursPerWeek,
-  projectGoals
+  projectGoals,
+  pitchAttachType,
+  pitchFileName,
+  pitchFileSize,
+  pitchFileType,
+  pitchFileData
 }) {
   const url = process.env.SHEET_WEBHOOK_URL;
   const secret = process.env.SHEET_WEBHOOK_SECRET;
@@ -108,7 +136,12 @@ async function logToSheet({
       pitchLink,
       pitchSummary,
       hoursPerWeek,
-      projectGoals
+      projectGoals,
+      pitchAttachType,
+      pitchFileName,
+      pitchFileSize,
+      pitchFileType,
+      pitchFileData
     }),
     redirect: 'follow'
   });
