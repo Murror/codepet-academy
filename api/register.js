@@ -11,7 +11,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, age, experience, referral, goals } = req.body || {};
+  const {
+    track,
+    name,
+    email,
+    // cohort track
+    age,
+    experience,
+    referral,
+    goals,
+    // founder track
+    education,
+    revenueStage,
+    householdIncome,
+    ideaStatus,
+    pitchLink,
+    pitchSummary,
+    hoursPerWeek,
+    projectGoals
+  } = req.body || {};
 
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required.' });
@@ -24,12 +42,21 @@ export default async function handler(req, res) {
 
   try {
     await logToSheet({
+      track: track || 'cohort',
       name,
       email,
       age: age || '',
       experience: experience || '',
       referral: referral || '',
-      goals: goals || ''
+      goals: goals || '',
+      education: education || '',
+      revenueStage: revenueStage || '',
+      householdIncome: householdIncome || '',
+      ideaStatus: ideaStatus || '',
+      pitchLink: pitchLink || '',
+      pitchSummary: pitchSummary || '',
+      hoursPerWeek: hoursPerWeek || '',
+      projectGoals: projectGoals || ''
     });
 
     return res.status(200).json({ success: true });
@@ -39,7 +66,23 @@ export default async function handler(req, res) {
   }
 }
 
-async function logToSheet({ name, email, age, experience, referral, goals }) {
+async function logToSheet({
+  track,
+  name,
+  email,
+  age,
+  experience,
+  referral,
+  goals,
+  education,
+  revenueStage,
+  householdIncome,
+  ideaStatus,
+  pitchLink,
+  pitchSummary,
+  hoursPerWeek,
+  projectGoals
+}) {
   const url = process.env.SHEET_WEBHOOK_URL;
   const secret = process.env.SHEET_WEBHOOK_SECRET;
   if (!url || !secret) {
@@ -49,7 +92,24 @@ async function logToSheet({ name, email, age, experience, referral, goals }) {
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ secret, name, email, age, experience, referral, goals }),
+    body: JSON.stringify({
+      secret,
+      track,
+      name,
+      email,
+      age,
+      experience,
+      referral,
+      goals,
+      education,
+      revenueStage,
+      householdIncome,
+      ideaStatus,
+      pitchLink,
+      pitchSummary,
+      hoursPerWeek,
+      projectGoals
+    }),
     redirect: 'follow'
   });
   if (!response.ok) {
