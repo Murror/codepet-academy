@@ -453,6 +453,69 @@
   }
   .founder-form__pitch[hidden]{ display:none; }
 
+  /* Pitch attachment toggle — two pills, "Paste a link" vs "Upload
+     a file". Selected pill picks up Codepet purple. */
+  .pitch-attach-toggle{
+    display:flex;gap:10px;border:none;padding:0;margin:0;
+  }
+  .pitch-attach-opt{
+    flex:1;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 16px;
+    background:#fff;
+    border:2px solid var(--ink-dark);
+    border-radius:10px;
+    cursor:pointer;
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:14px;font-weight:600;
+    color:var(--ink-dark);
+    transition:filter .15s ease, transform .15s ease, background .15s ease;
+  }
+  .pitch-attach-opt input{
+    position:absolute;opacity:0;pointer-events:none;
+  }
+  .pitch-attach-opt:hover{ filter:brightness(0.98); transform:translateY(-1px); }
+  .pitch-attach-opt:has(input:checked){
+    background:var(--purple);
+    border-color:var(--purple);
+    color:#fff;
+  }
+  .pitch-attach-field[hidden]{ display:none; }
+
+  /* File input — the native input is hidden and a styled chip
+     stands in for it, matching the rest of the form's pixel-pill
+     aesthetic. Updates with the filename once chosen (see JS). */
+  .register-file{
+    display:flex;flex-direction:column;gap:6px;cursor:pointer;
+  }
+  .register-file__input{
+    position:absolute;opacity:0;width:0;height:0;
+  }
+  .register-file__chip{
+    display:flex;align-items:center;gap:10px;
+    padding:22px 24px;
+    background:#fff;
+    border:2px solid var(--ink-dark);
+    border-radius:14px;
+    color:var(--ink-dark);
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:15px;
+    transition:filter .15s ease, background .15s ease;
+  }
+  .register-file:hover .register-file__chip{ filter:brightness(0.98); }
+  .register-file__input:focus + .register-file__chip{
+    outline:2px solid var(--purple);outline-offset:2px;
+  }
+  .register-file__icon{ font-size:18px; }
+  .register-file__chip[data-has-file="true"]{
+    background:color-mix(in srgb, var(--purple) 8%, #fff);
+    border-color:var(--purple);
+  }
+  .register-file__hint{
+    font-size:12px;color:var(--muted);margin:0;
+    font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  }
+
   .register-input,.register-select{
     font-family:'Open Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
     font-size:16px;letter-spacing:0.01em;text-transform:none;
@@ -1897,7 +1960,37 @@
           <label class="founder-form__radio"><input type="radio" name="ideaStatus" value="fresh-start"> No — starting fresh</label>
         </fieldset>
         <div class="founder-form__pitch" id="pitchFields" hidden>
-          <input type="url" name="pitchLink" placeholder="Link to your deck (Google Drive, Notion, Figma...)" aria-label="Pitch link" class="register-input">
+          <!-- Attachment type toggle: founders pick whether they want to
+               paste a link OR upload a file. The active input swaps via JS
+               (see #pitchFields handler below). -->
+          <fieldset class="pitch-attach-toggle" aria-label="How to share your pitch">
+            <label class="pitch-attach-opt">
+              <input type="radio" name="pitchAttachType" value="link" checked>
+              <span>Paste a link</span>
+            </label>
+            <label class="pitch-attach-opt">
+              <input type="radio" name="pitchAttachType" value="file">
+              <span>Upload a file</span>
+            </label>
+          </fieldset>
+
+          <!-- Link input (visible by default) -->
+          <div class="pitch-attach-field" data-attach="link">
+            <input type="url" name="pitchLink" placeholder="Link to your deck (Google Drive, Notion, Figma...)" aria-label="Pitch link" class="register-input">
+          </div>
+
+          <!-- File input (shown when 'Upload a file' is selected) -->
+          <div class="pitch-attach-field" data-attach="file" hidden>
+            <label class="register-file">
+              <input type="file" name="pitchFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.key,.png,.jpg,.jpeg" class="register-file__input" id="pitchFileInput">
+              <span class="register-file__chip" id="pitchFileLabel">
+                <span class="register-file__icon" aria-hidden="true">📎</span>
+                <span class="register-file__text">Choose a file (PDF, PPT, DOC, image)</span>
+              </span>
+            </label>
+            <p class="register-file__hint">After submitting, we&rsquo;ll email you to collect the file.</p>
+          </div>
+
           <input type="text" name="pitchSummary" placeholder="Describe your idea in one sentence" aria-label="One-sentence pitch" class="register-input">
         </div>
         <select name="hoursPerWeek" aria-label="Hours per week" class="register-input register-select">
@@ -2153,12 +2246,41 @@
       input.addEventListener('change', applyTrack);
     });
     // Conditional pitch-link/summary fields under "Do you have an idea?"
+    // + the link/file attachment-type toggle inside pitchFields.
     form.addEventListener('change', (e) => {
       if (e.target && e.target.name === 'ideaStatus') {
         const pitch = document.getElementById('pitchFields');
         if (pitch) pitch.hidden = e.target.value !== 'have-pitch';
       }
+      if (e.target && e.target.name === 'pitchAttachType') {
+        const type = e.target.value;
+        form.querySelectorAll('.pitch-attach-field').forEach((el) => {
+          el.hidden = el.dataset.attach !== type;
+        });
+      }
     });
+    // File picker — swap the chip label with the chosen filename so
+    // the user sees their selection echoed back.
+    const pitchFileInput = document.getElementById('pitchFileInput');
+    const pitchFileLabel = document.getElementById('pitchFileLabel');
+    if (pitchFileInput && pitchFileLabel) {
+      const originalLabelHTML = pitchFileLabel.innerHTML;
+      pitchFileInput.addEventListener('change', () => {
+        const file = pitchFileInput.files && pitchFileInput.files[0];
+        if (file) {
+          const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+          pitchFileLabel.innerHTML =
+            '<span class="register-file__icon" aria-hidden="true">✓</span>' +
+            '<span class="register-file__text">' +
+              file.name.replace(/[<>&]/g, '') + ' (' + sizeMB + ' MB)' +
+            '</span>';
+          pitchFileLabel.dataset.hasFile = 'true';
+        } else {
+          pitchFileLabel.innerHTML = originalLabelHTML;
+          pitchFileLabel.dataset.hasFile = 'false';
+        }
+      });
+    }
     applyTrack();
 
     form.addEventListener('submit', async (e) => {
@@ -2166,6 +2288,25 @@
       const formData = Object.fromEntries(new FormData(form));
       const track = formData.track || 'cohort';
       window.coTrack && window.coTrack('register_submit_attempt', { track: track });
+
+      // File inputs serialise to an empty object in JSON, so capture
+      // the selected file's metadata explicitly. Drop the link field
+      // if the user picked "Upload a file" (and vice versa) so only
+      // the relevant attachment is forwarded.
+      const attachType = formData.pitchAttachType || 'link';
+      const fileInput = document.getElementById('pitchFileInput');
+      const file = fileInput && fileInput.files && fileInput.files[0];
+      if (attachType === 'file' && file) {
+        formData.pitchFileName = file.name;
+        formData.pitchFileSize = file.size;
+        formData.pitchFileType = file.type || 'unknown';
+        formData.pitchLink = '';
+      } else if (attachType === 'link') {
+        formData.pitchFileName = '';
+        formData.pitchFileSize = '';
+        formData.pitchFileType = '';
+      }
+      delete formData.pitchFile;
 
       // Common required fields (both tracks)
       if (!formData.name || !formData.email || !formData.referral || !formData.goals) {
