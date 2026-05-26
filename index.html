@@ -2504,7 +2504,7 @@
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
-  (function(){
+  function initThankModalHandlers(){
     const modal = document.getElementById('thankModal');
     const closeX = document.getElementById('closeThankModal');
     const dismiss = document.getElementById('thankModalDismiss');
@@ -2518,7 +2518,15 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeThankModal();
     });
-  })();
+  }
+  // The modal HTML lives AFTER this script in the body, so wait for
+  // DOMContentLoaded — otherwise getElementById returns null and the
+  // close buttons silently never get wired up.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThankModalHandlers);
+  } else {
+    initThankModalHandlers();
+  }
 
   // Global CTA click tracker — picks up nav, hero, section CTAs, footer pills, lang toggle.
   (function(){

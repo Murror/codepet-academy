@@ -2441,7 +2441,7 @@
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
-  (function(){
+  function initThankModalHandlers(){
     const modal = document.getElementById('thankModal');
     const closeX = document.getElementById('closeThankModal');
     const dismiss = document.getElementById('thankModalDismiss');
@@ -2454,7 +2454,13 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeThankModal();
     });
-  })();
+  }
+  // Modal HTML đặt sau script này, nên phải chờ DOMContentLoaded.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThankModalHandlers);
+  } else {
+    initThankModalHandlers();
+  }
 
   // Global CTA click tracker — picks up nav, hero, section CTAs, footer pills, lang toggle.
   (function(){
