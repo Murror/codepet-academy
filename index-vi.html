@@ -1493,6 +1493,69 @@
     opacity: 0.75;
     font-size: 15px;
   }
+
+  /* Post-submission thank-you modal */
+  .thank-modal-box{
+    max-width: 480px;
+    text-align: center;
+    padding: 56px 36px 40px;
+  }
+  .thank-modal-art{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 140px;
+    margin-bottom: 12px;
+  }
+  .thank-modal-art img{
+    width: 120px;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    filter: drop-shadow(0 6px 0 rgba(123, 107, 216, 0.25));
+    animation: thank-bob 2.4s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+  @keyframes thank-bob{
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  .thank-modal-sparkle{
+    position: absolute;
+    font-size: 22px;
+    color: var(--purple, #7B6BD8);
+    animation: thank-sparkle 1.8s ease-in-out infinite;
+  }
+  .thank-modal-sparkle--1{ top: 8%;  left: 22%;  animation-delay: 0s;   }
+  .thank-modal-sparkle--2{ top: 18%; right: 20%; animation-delay: 0.4s; font-size: 16px; }
+  .thank-modal-sparkle--3{ bottom: 14%; left: 30%; animation-delay: 0.8s; font-size: 14px; }
+  @keyframes thank-sparkle{
+    0%, 100% { opacity: 0.3; transform: scale(0.85); }
+    50%      { opacity: 1;   transform: scale(1.15); }
+  }
+  .thank-modal-title{
+    text-align: center;
+    margin-top: 4px;
+    color: var(--ink-dark);
+  }
+  .thank-modal-subtitle{
+    text-align: center;
+    margin: 8px auto 28px;
+    max-width: 36ch;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .thank-modal-actions{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  @media (max-width: 480px){
+    .thank-modal-actions .btn{ flex: 1 1 auto; min-width: 140px; }
+  }
+
   .founder-form{ max-width: none; }
   .founder-form__helper{
     margin-top: -8px;
@@ -2334,6 +2397,7 @@
           experience: formData.experience || '',
           referral: formData.referral || ''
         });
+        showThankModal(track);
         form.reset();
         applyTrack();
         setTimeout(() => {
@@ -2349,6 +2413,46 @@
         statusEl.textContent = err.message || 'Có lỗi xảy ra. Bạn thử lại nhé?';
         window.coTrack && window.coTrack('register_submit_error', { message: (err && err.message) || 'unknown', track: track });
       }
+    });
+  })();
+
+  // Thank-you modal — pops up sau khi gửi đăng ký thành công.
+  function showThankModal(track) {
+    const modal = document.getElementById('thankModal');
+    if (!modal) return;
+    const title = document.getElementById('thankModalTitle');
+    const subtitle = document.getElementById('thankModalSubtitle');
+    if (track === 'founder') {
+      title.textContent = "Cảm ơn — chúng tôi sẽ liên hệ sớm!";
+      subtitle.textContent = "Astro sẽ sớm liên hệ về buổi tư vấn 1:1 của bạn. Trong lúc đó, hãy khám phá thêm về Codepet.";
+    } else {
+      title.textContent = "Cảm ơn — bạn đã đăng ký thành công!";
+      subtitle.textContent = "Chúng tôi đã ghi nhận thông tin và sẽ sớm liên hệ về Khóa 1. Trong lúc đó, hãy khám phá thêm về Codepet.";
+    }
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    window.coTrack && window.coTrack('thank_modal_open', { track: track });
+  }
+  function closeThankModal() {
+    const modal = document.getElementById('thankModal');
+    if (!modal || modal.hidden) return;
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  (function(){
+    const modal = document.getElementById('thankModal');
+    const closeX = document.getElementById('closeThankModal');
+    const dismiss = document.getElementById('thankModalDismiss');
+    if (!modal) return;
+    if (closeX) closeX.addEventListener('click', closeThankModal);
+    if (dismiss) dismiss.addEventListener('click', closeThankModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeThankModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeThankModal();
     });
   })();
 
@@ -2558,6 +2662,31 @@
       <button type="submit" class="register-btn" id="founderSubmitBtn">Đặt lịch tư vấn</button>
       <p id="founderStatus" class="register-status" role="status" aria-live="polite"></p>
     </form>
+  </div>
+</div>
+
+<!-- Post-submission thank-you modal — pops up after a successful
+     registration. Vietnamese copy. -->
+<div class="modal-overlay" id="thankModal" hidden aria-hidden="true" role="dialog" aria-labelledby="thankModalTitle">
+  <div class="modal-box thank-modal-box">
+    <button class="modal-close" id="closeThankModal" aria-label="Đóng">×</button>
+
+    <div class="thank-modal-art" aria-hidden="true">
+      <img src="/academy/pets/4-purple-byte.png" alt="" />
+      <span class="thank-modal-sparkle thank-modal-sparkle--1">✦</span>
+      <span class="thank-modal-sparkle thank-modal-sparkle--2">✦</span>
+      <span class="thank-modal-sparkle thank-modal-sparkle--3">✦</span>
+    </div>
+
+    <h2 class="modal-title thank-modal-title" id="thankModalTitle">Cảm ơn — bạn đã đăng ký thành công!</h2>
+    <p class="modal-subtitle thank-modal-subtitle" id="thankModalSubtitle">
+      Chúng tôi đã ghi nhận thông tin của bạn và sẽ sớm liên hệ về Khóa 1.
+    </p>
+
+    <div class="thank-modal-actions">
+      <a href="https://code-pet.com/" class="btn btn--primary btn--lg" id="thankModalPrimary">Quay lại Codepet</a>
+      <button type="button" class="btn btn--secondary btn--lg" id="thankModalDismiss">Đóng</button>
+    </div>
   </div>
 </div>
 
